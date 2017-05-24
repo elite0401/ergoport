@@ -1,0 +1,93 @@
+{% comment %}
+  List out your main-menu linklist (default)
+  More info on linklists:
+    - http://docs.shopify.com/themes/liquid-variables/linklists
+{% endcomment %}
+
+{% if settings.display_megamenu %}
+{% assign items_list = settings.megamenu_items | split:"," | strip | downcase %}
+{% endif %}
+
+<ul class="site-nav">
+  {% for link in linklists.main-menu.links %}
+  	{% assign i = forloop.index | downcase %}
+    {% assign cat = link.title | downcase %}
+    <li {% if linklists[link.handle] != empty %}class="dropdown {% if settings.display_megamenu and items_list contains cat %}mega-menu{% endif %}"{% endif %}>
+      <a href="{{ link.url }}" class="{% if link.active %}current{% endif %}">
+        <span>
+          {% if settings.enable_multilang %}
+          <span class="lang1">{{ link.title | split: '|' | first }}</span>
+          <span class="lang2">{{ link.title | split: '|' | last }}</span>
+          {% else %}
+          {{ link.title | split: '|' | first }}
+          {% endif %}
+        </span>
+        {% if linklists[link.handle] != empty and settings.show_dropdown_arrow %}<span class="icon-dropdown"></span>{% endif %}
+      </a> 	
+    
+      {% comment %}
+      Check if menu item is Mega menu
+      {% endcomment %}
+      {% if settings.display_megamenu and items_list contains cat %}
+        <div class="site-nav-dropdown">
+        {% include 'mega-menu' %}
+        </div>
+      
+      {% else %}
+      {% comment %} normal menu {% endcomment %}
+      <ul class="site-nav-dropdown">
+        {% for childlink in linklists[link.handle].links %}
+          <li {% if linklists[childlink.handle] != empty %}class="dropdown"{% endif %}>
+            <a href="{{ childlink.url }}" class="{% if childlink.active %}current{% endif %}">
+              <span>
+                {% if settings.enable_multilang %}
+                <span class="lang1">{{ childlink.title | split: '|' | first }}</span>
+                <span class="lang2">{{ childlink.title | split: '|' | last }}</span>
+                {% else %}
+                {{ childlink.title | split: '|' | first }}
+                {% endif %}
+              </span>
+              {% if linklists[childlink.handle] != empty and settings.show_dropdown_arrow %}<span class="icon-dropdown"></span>{% endif %}
+            </a>
+            <ul class="site-nav-dropdown">
+              {% for childlink2 in linklists.[childlink.handle].links %}
+                <li {% if linklists[childlink2.handle] != empty %}class="dropdown"{% endif %}>
+                  <a href="{{ childlink2.url }}" class="{% if childlink2.active %}current{% endif %}">
+                    <span>
+                      {% if settings.enable_multilang %}
+                      <span class="lang1">{{ childlink2.title | split: '|' | first }}</span>
+                      <span class="lang2">{{ childlink2.title | split: '|' | last }}</span>
+                      {% else %}
+                      {{ childlink2.title | split: '|' | first }}
+                      {% endif %}
+                    </span>
+                    {% if linklists[childlink2.handle] != empty and settings.show_dropdown_arrow %}<span class="icon-dropdown"></span>{% endif %}
+                  </a>
+                  <ul class="site-nav-dropdown">
+                    {% for childlink3 in linklists.[childlink2.handle].links %}
+                      <li>
+                        <a href="{{ childlink3.url }}" class="{% if link.active %}current{% endif %}">
+                          <span>
+                            {% if settings.enable_multilang %}
+                            <span class="lang1">{{ childlink3.title | split: '|' | first }}</span>
+                            <span class="lang2">{{ childlink3.title | split: '|' | last }}</span>
+                            {% else %}
+                            {{ childlink3.title | split: '|' | first }}
+                            {% endif %}
+                          </span>
+                        </a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </li>
+              {% endfor %}
+
+            </ul>
+          </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+    </li>
+  {% endfor %}
+</ul>

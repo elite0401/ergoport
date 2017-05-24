@@ -1,0 +1,39 @@
+{% capture show_featured_product_menu %}show_featured_product_menu_{{ i }}{% endcapture %}  
+{% capture menu_featured_product_title %}menu_featured_product_title_{{ i }}{% endcapture %}
+{% capture menu_featured_product_list_collection %}menu_featured_product_list_collection_{{ i }}{% endcapture %}
+
+{% if settings[show_featured_product_menu] %}
+<div class="widget-featured-product">
+  {% if settings[menu_featured_product_title] != blank %}
+  <div class="widget-title">   
+    <h3>
+      {% if settings.enable_multilang %}
+      <span class="lang1">{{ settings[menu_featured_product_title] | split: '|' | first }}</span>
+      <span class="lang2">{{ settings[menu_featured_product_title] | split: '|' | last }}</span>
+      {% else %}
+      <span>{{ settings[menu_featured_product_title] | split: '|' | first }}</span>
+      {% endif %}
+    </h3>
+  </div>
+  {% endif %}
+  
+  {% assign t = settings[menu_featured_product_list_collection] %}
+  
+  {% if settings[menu_featured_product_list_collection] == blank %}
+  <p style="margin-bottom: 30px;">Please select a collection in Theme Setting to display the products (Navigation -> Featured Product in Mega Menu)</p>
+  {% else %}
+  <div class="widget-product">
+	<div class="products-grid">
+	  {% comment %}
+		Loop through products in your Frontpage collection.
+		This collection is created by default, but you must add products to it.
+	  {% endcomment %}
+      {% capture index %}{{ 'now' | date: '%S' | times: collections.[t].products.size | divided_by: 60 }}{% endcapture %}
+	  {% for product in collections.[t].products offset:index limit:1 %}
+      {% include 'mega-menu-product-grid' %}	  
+  	  {% endfor %}
+    </div> 
+  </div>
+  {% endif %}
+</div>
+{% endif %}

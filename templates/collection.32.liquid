@@ -1,0 +1,45 @@
+{% include 'breadcrumb' %}
+
+<div class="row">
+  {% include 'collection-sidebar' %}
+  <div class="block-row col-xs-9 col-main">    
+    {% paginate collection.products by 32 %}
+    
+    {% include 'collection-header' %}
+    {% include 'toolbar' %}
+    
+    {% comment %}
+      Use class grid-uniform to have evenly sized columns clear
+      each other properly at each breakpoint.
+    {% endcomment %}
+    
+    <div class="products-grid row">
+      {% if collection.products.size > 0 %}      
+        {% if settings.collection_results_per_row != blank and settings.collection_results_per_row != '5' %}
+          {% assign product_grid = 12 | divided_by: settings.collection_results_per_row %}
+          {% assign columns = true %}
+        {% endif %}
+
+        {% for product in collection.products %}
+          <div class="{% if settings.product_image_border%}grid-item-border{% endif %}{% if settings.product_image_crop%} crop_image{% else %} no_crop_image{% endif %} grid-item col-xs-6 col-sm-4 {% if settings.display_sidebar_cat_page %}col-md-4{% else %}{% if product_grid == 3 %} col-md-3{% endif %}{% endif %} {% if columns %}col-lg-{{product_grid}}{% else %}col{% endif %}">
+            {% include 'product-grid-item' %}
+          </div>
+        {% endfor %}
+      {% else %}
+      <p class="text-center" {% if settings.enable_multilang %}data-translate="collections.general.no_matches"{% endif %}>{{ 'collections.general.no_matches' | t }}</p>
+      {% endif %}
+    </div>
+    
+    {% if paginate.pages > 1 %}
+    <div class="padding">
+      {% include 'pagination-page' %}
+    </div>
+    {% endif %}
+    
+    {% endpaginate %}    
+  </div>
+</div>
+
+{% if settings.display_recently_viewed_products %} 
+{% include 'recently-viewed-products' %}
+{% endif %}

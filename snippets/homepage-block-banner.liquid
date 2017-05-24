@@ -1,0 +1,47 @@
+{% if settings.display_banner %}
+<section class="banner wow fadeInUp">
+  {{ 'banner.jpg' | asset_url | img_tag }}
+  <div class="container">
+    <div class="inner">
+      <div class="content">
+      {% if settings.banner_text_title != blank %}
+        {% if settings.enable_multilang %}
+        <h2 class="lang1">{{ settings.banner_text_title | split: '|' | first }}</h2>
+        <h2 class="lang2">{{ settings.banner_text_title | split: '|' | last }}</h2>
+        {% else %}
+        <h2>{{ settings.banner_text_title | split: '|' | first }}</h2>
+        {% endif %}
+        <p class="line">&nbsp;</p>
+      {% endif %}
+      
+      {% if settings.banner_text_description != blank %}
+        {% if settings.enable_multilang %}
+        <p class="lang1">{{ settings.banner_text_description | split: '|' | first }}</p>
+        <p class="lang2">{{ settings.banner_text_description | split: '|' | last }}</p>      
+        {% else %}
+        <p>{{ settings.banner_text_description | split: '|' | first }}</p>
+        {% endif %}
+      {% endif %}
+      
+      {% if settings.banner_button_text != blank %}
+        {% if settings.enable_multilang %}
+        <a href="{{ settings.banner_button_link }}" title="{{ settings.banner_button_text | split: '|' | first }}" class="btn lang1">
+          {{ settings.banner_button_text | split: '|' | first }}
+          <span class="arrow">arrow</span>
+        </a>
+        <a href="{{ settings.banner_button_link }}" title="{{ settings.banner_button_text | split: '|' | last }}" class="btn lang2">
+          {{ settings.banner_button_text | split: '|' | last }}
+          <span class="arrow">arrow</span>
+        </a>
+        {% else %}
+        <a href="{{ settings.banner_button_link }}" title="{{ settings.banner_button_text | split: '|' | first }}" class="btn">
+          {{ settings.banner_button_text | split: '|' | first }}
+          <span class="arrow">arrow</span>
+        </a>
+        {% endif %}
+      {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}

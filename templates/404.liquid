@@ -1,0 +1,15 @@
+<!-- /templates/404.liquid -->
+<h1 {% if settings.enable_multilang %}data-translate="general.404.title"{%endif%}>{{ 'general.404.title' | t }}</h1>
+<p>
+  <span {% if settings.enable_multilang %}data-translate="general.404.subtext_html"{%endif%}>
+  {{ 'general.404.subtext_html' | t }}
+  </span>
+  <a {% if settings.enable_multilang %}data-translate="general.404.click_here"{%endif%} href="/collections/all">
+	{{ 'general.404.click_here' | t }}
+  </a>
+  <span {% if settings.enable_multilang %}data-translate="general.404.continue_shopping"{%endif%}>
+    {{ 'general.404.continue_shopping' | t }}
+  </span>
+</p>
+
+{% include 'SEOMetaManager-404' %}

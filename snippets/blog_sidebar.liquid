@@ -1,0 +1,35 @@
+<div class="col-xs-3 sidebar">
+  {% include 'widget_article' %}
+  
+  <div class="widget widget-tags">
+    {% if settings.display_blog_tags %}
+    {% if blog.all_tags.size > 0 %}
+    <div class="widget-title">
+      <h3><span {% if settings.enable_multilang %}data-translate="blogs.article.tags"{% endif %}>{{ 'blogs.article.tags' | t }}</span></h3>
+    </div>
+    <div class="widget-content">
+      <ul class="tags">
+        <li {% unless current_tags %}class="active"{% endunless %}>
+          <a href="{{ shop.url}}/blogs/{{ blog.handle }}" {% if settings.enable_multilang %}data-translate="collections.toolbar.all"{% endif %}>{{ 'collections.toolbar.all' | t }}</a>
+        </li>
+        {% for tag in blog.all_tags %}
+          {% if current_tags contains tag %}
+            <li class="active">{{ tag | link_to_remove_tag: tag }}</li>
+          {% else %}
+            <li>{{ tag | link_to_tag: tag }}</li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    {% endif %}
+  </div>
+  
+  {% if settings.display_banner_sidebar_blog %}
+  {% include 'collection-sidebar-banner-block' %}
+  {% endif %}
+  
+  {% if settings.display_sidebar_custom_blog %}
+  {% include 'collection-sidebar-custom-cms-block' %}
+  {% endif %}
+</div>

@@ -1,0 +1,44 @@
+{% comment %}
+  This snippet is used to showcase each collection during the loop,
+  'for product in collection.products' in list-collections.liquid.
+{% endcomment %}
+
+{% assign delayTime = 200 | times : forloop.index %}
+<div class="grid-item wow fadeIn col-xs-12 col-sm-4" data-wow-delay="{{delayTime}}ms">
+
+  {% comment %}
+    Use capture to put the collection title in a variable that is used in liquid filters
+  {% endcomment %}
+  
+  {% capture collection_title %}{{ collection.title | escape }}{% endcapture %}
+  <div class="product-top">
+    <a href="{{ collection.url }}" title="{{ collection_title }}">
+      {% if collection.image %}
+      {{ collection.image.src | collection_img_url: 'large' | img_tag: collection_title }}
+      {% else %}
+      {{ collection.products.first.featured_image | product_img_url: 'large' | img_tag: collection_title }}
+      {% endif %}
+      <div class="hover"></div>
+    </a>
+    <a href="{{ collection.url }}" class="view">&nbsp;</a>
+  </div>
+  <div class="collection-title-wrapper">
+    <div class="collection-title">
+      <h3 class="h5">
+        {% if settings.enable_multilang %}
+        <a href="{{ collection.url }}" title="{{ 'collections.general.link_title' | t: title: collection_title }}" {% if settings.enable_multilang %}data-translate="collections.general.link_title|title:{{collection_title}}" translate-item="title"{% endif %}>
+          <span class="lang1">{{ collection.title | split: '|' | first }}</span>
+          <span class="lang2">{{ collection.title | split: '|' | last }}</span>
+        </a>
+        {% else %}
+        <a href="{{ collection.url }}" title="{{ 'collections.general.link_title' | t: title: collection_title }}" {% if settings.enable_multilang %}data-translate="collections.general.link_title|title:{{collection_title}}" translate-item="title"{% endif %}>
+          {{ collection.title }}
+        </a>
+        {% endif %}
+      </h3>
+      <p class="count-products" {% if settings.enable_multilang %}data-translate="collections.general.items_with_count|count:{{collection.all_products_count}}"{% endif %}>{{ 'collections.general.items_with_count' | t: count: collection.all_products_count }}</p>
+      <p class="desc">{{ collection.description | strip_html | truncatewords: 14 }}</p>
+      <p><a href="{{ collection.url }}" class="btn" {% if settings.enable_multilang %}data-translate="collections.general.shop_the_collection"{% endif %}>{{ 'collections.general.shop_the_collection' | t }}</a></p>
+    </div>
+  </div>
+</div>

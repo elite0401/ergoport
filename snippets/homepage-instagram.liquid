@@ -1,0 +1,68 @@
+{{ 'instafeed.min.js' | asset_url | script_tag }}
+
+{% if settings.show_instagram %}
+<section class="home-instagram wow fadeIn" data-wow-delay="{{ settings.time_lazy_load }}ms">
+  <div class="container">
+    <div class="widget-title">   
+      {% if settings.instagram_title != blank %}
+        {% if settings.enable_multilang %}
+        <h3 class="lang1">{{ settings.instagram_title | split: '|' | first }}</h3>
+        <h3 class="lang2">{{ settings.instagram_title | split: '|' | last }}</h3>
+        {% else %}
+        <h3>{{ settings.instagram_title | split: '|' | first }}</h3>
+        {% endif %}
+      {% endif %}
+      
+      {% if settings.instagram_des != blank %}
+        {% if settings.enable_multilang %}
+        <p class="instagram-des lang1"><span>&nbsp;</span>{{ settings.instagram_des | split: '|' | first }}</p>
+        <p class="instagram-des lang2"><span>&nbsp;</span>{{ settings.instagram_des | split: '|' | last }}</p>
+        {% else %}
+        <p class="instagram-des"><span>&nbsp;</span>{{ settings.instagram_des | split: '|' | first }}</p>
+        {% endif %}
+      {% endif %}
+    </div>
+    
+    <div id="instafeed" class="row owl-carousel"></div>  
+    {% if settings.display_instagram_button and settings.instagram_button_text != blank %}
+      {% if settings.enable_multilang %}
+      <a href="{{ settings.instagram_button_link }}" title="{{ settings.instagram_button_text | split: '|' | first }}" class="btn lang1">
+        {{ settings.instagram_button_text | split: '|' | first }}<span class="arrow">arrow</span>
+      </a>    
+      <a href="{{ settings.instagram_button_link }}" title="{{ settings.instagram_button_text | split: '|' | last }}" class="btn lang2">
+        {{ settings.instagram_button_text | split: '|' | last }}<span class="arrow">arrow</span>
+      </a>
+      {% else %}
+      <a href="{{ settings.instagram_button_link }}" title="{{ settings.instagram_button_text | split: '|' | first }}" class="btn">
+        {{ settings.instagram_button_text | split: '|' | first }}<span class="arrow">arrow</span>
+      </a> 
+      {% endif %}
+    {% endif %}
+  </div>
+</section>
+
+<script>
+  jQuery(document).ready(function(){
+    var feed = new Instafeed({
+      get: "{{ settings.instagram_get }}",    
+      {% if settings.instagram_tag != blank %} tagName: "{{ settings.instagram_tag }}", {% endif %}
+      {% if settings.locationId != blank %} locationId: "{{ settings.instagram_locationId }}", {% endif %}
+      {% if settings.user-id != blank %} userId: {{ settings.user-id }}, {% endif %}
+      {% if settings.accessToken != blank %}accessToken: '{{ settings.accessToken }}', {% endif %}
+      resolution: "{{ settings.resolution_images }}",
+      clientId: "{{ settings.client-id }}",
+      limit: "{{ settings.limit }}",
+      after: function() {
+        jQuery("#instafeed a").attr("target","_blank");
+        jQuery("#instafeed").owlCarousel({
+          navigation : true,
+          items: {{ settings.images_per_row }},
+          itemsTablet: [768,3],
+          itemsTabletSmall: [650,2]
+        });
+      }
+    });
+    feed.run();
+  });
+</script>
+{% endif %}

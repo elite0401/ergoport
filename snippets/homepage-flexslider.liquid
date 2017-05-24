@@ -1,0 +1,189 @@
+{% if template == "index" and settings.display_slideshow %}
+<section class="main-slideshow">
+  <div class="flexslider">
+    <ul class="slides">
+      {% capture slideheadingSize %}slide_heading_size{% endcapture %}
+      {% capture slideheadingColor %}slide_heading_color{% endcapture %}
+      {% capture slidetextSize %}slide_text_size{% endcapture %}
+      {% capture slidetextColor %}slide_text_color{% endcapture %}
+      {% for i in (1..10) %}
+      {% capture display_slideshow %}display_slideshow_{{ i }}{% endcapture %}
+      {% capture video %}video_{{ i }}{% endcapture %}
+      {% capture slide %}slideshow_{{ i }}.jpg{% endcapture %}
+      {% capture link %}image_{{ i }}_link{% endcapture %}
+      {% capture alt %}image_{{ i }}_alt{% endcapture %}
+      {% capture slideheading %}slide-heading_{{ i }}{% endcapture %}
+      {% capture slideheadingsize %}slide_heading_size_{{ i }}{% endcapture %}
+      {% capture slideheadingcolor %}slide_heading_color_{{ i }}{% endcapture %}
+      {% capture slidetextsize %}slide_text_size_{{ i }}{% endcapture %}
+      {% capture slidetextcolor %}slide_text_color_{{ i }}{% endcapture %}
+      {% capture slidetext %}slide-text_{{ i }}{% endcapture %}
+      {% capture buttontext %}button-text_{{ i }}{% endcapture %}
+      {% capture text_align_slide %}text_align_slide_{{ i }}{% endcapture %}
+      {% if settings[display_slideshow] != 'none' %}
+      <li class="slide{% if settings[display_slideshow] == 'video' %} video{% endif %}">
+        {% if settings[display_slideshow] == 'video' %}
+        {{ settings[video] }}
+        {% else %}
+        <img src="{{ slide | asset_url }}" data-url="{{ settings[link] }}" class="slide-img" alt="{{ settings[alt] }}" />
+        <div class="slide-des" 
+             {% if settings[text_align_slide] == 'center' %}
+             style="max-width: 100%;"
+             {% elsif settings[text_align_slide] == 'right' %}
+             style="left: auto;"
+             {% endif %}
+             >
+          {% if settings[slideheading] != blank %}
+          <h2 class="slide-heading" style="
+                                           {% if settings[slideheadingsize] != blank %} 
+                                           font-size: {{settings[slideheadingsize]}}px;
+                                           {% elsif settings[slideheadingSize] != blank %}
+                                           font-size: {{settings[slideheadingSize]}}px;
+                                           {% endif %}
+                                           {% if settings[slideheadingcolor] != blank %} 
+                                           color: {{settings[slideheadingcolor]}};
+                                           {% elsif settings[slideheadingColor] != blank %}
+                                           color: {{settings[slideheadingColor]}};
+                                           {% endif %}"
+              >
+            {% if settings.enable_multilang %}
+            <span class="lang1">{{ settings[slideheading] | split: '|' | first }}</span>
+            <span class="lang2">{{ settings[slideheading] | split: '|' | last }}</span>
+            {% else %}
+            {{ settings[slideheading] | split: '|' | first }}
+            {% endif %}
+          </h2>
+          
+          <p class="line" style="
+                                 {% if settings[slideheadingcolor] != blank %} 
+                                 background-color: {{settings[slideheadingcolor]}};
+                                 {% elsif settings[slideheadingColor] != blank %}
+                                 background-color: {{settings[slideheadingColor]}};
+                                 {% endif %}"
+             >&nbsp;</p>
+          {% endif %}
+          
+          {% if settings[slidetext] != blank %}
+          <p class="slide-text" style="
+                                       {% if settings[slidetextsize] != blank %} 
+                                       font-size: {{settings[slidetextsize]}}px;
+                                       {% else %}
+                                       font-size: {{settings[slidetextSize]}}px;
+                                       {% endif %}
+                                       {% if settings[slidetextcolor] != blank %} 
+                                       color: {{settings[slidetextcolor]}};
+                                       {% else %}
+                                       color: {{settings[slidetextColor]}};
+                                       {% endif %}"
+             >
+            {% if settings.enable_multilang %}
+            <span class="lang1">{{ settings[slidetext] | split: '|' | first }}</span>
+            <span class="lang2">{{ settings[slidetext] | split: '|' | last }}</span>
+            {% else %}
+            {{ settings[slidetext] | split: '|' | first }}
+            {% endif %}
+          </p>
+          {% endif %}
+          {% if settings[buttontext] != blank %}
+          <a href="{{ settings[link] }}" class="slide-button btn">
+            {% if settings.enable_multilang %}
+            <span class="lang1">{{ settings[buttontext] | split: '|' | first }}</span>
+            <span class="lang2">{{ settings[buttontext] | split: '|' | last }}</span>
+            {% else %}
+            {{ settings[buttontext] | split: '|' | first }}
+            {% endif %}
+            <span class="arrow">arrrow</span>
+          </a>
+          {% endif %}
+        </div>
+        {% endif %}
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </div><!-- /.flexslider -->
+</section> <!-- /#slideshow.row -->
+<script>
+$(function() {
+	var slider, // Global slider value to force playing and pausing by direct access of the slider control
+		canSlide = true; // Global switch to monitor video state
+ 
+	// Load the YouTube API. For some reason it's required to load it like this
+	var tag = document.createElement('script');
+    tag.src = "//www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+ 
+    // Setup a callback for the YouTube api to attach video event handlers
+	window.onYouTubeIframeAPIReady = function(){
+		// Iterate through all videos
+		$('.flexslider iframe').each(function(){
+			// Create a new player pointer; "this" is a DOMElement of the player's iframe
+			var player = new YT.Player(this, {
+				playerVars: {
+					autoplay: 0
+				}
+			});
+ 
+			// Watch for changes on the player
+			player.addEventListener("onStateChange", function(state){
+				switch(state.data)
+				{
+					// If the user is playing a video, stop the slider
+					case YT.PlayerState.PLAYING:
+						slider.flexslider("stop");
+						canSlide = false;
+						break;
+					// The video is no longer player, give the go-ahead to start the slider back up
+					case YT.PlayerState.ENDED:
+					case YT.PlayerState.PAUSED:
+						slider.flexslider("play");
+						canSlide = true;
+						break;
+				}
+			});
+
+			$(this).data('player', player);
+		});
+	}
+ 
+	// Setup the slider control
+	slider = $(".flexslider")
+		.flexslider({
+	    	animation: "{{ settings.slideshow_transition }}",
+			easing: "swing",
+			slideshowSpeed: {{ settings.slideshow_speed }},
+			animationSpeed: 900,
+			pauseOnHover: true,
+			pauseOnAction: true,
+			touch: true,
+			video: true,
+			controlNav: true,
+			directionNav: true,
+			keyboardNav: true,
+			{% if settings.slideshow_transition == "slide" %}
+			animationLoop: false,
+			{% endif %}
+			slideshow: true,
+			useCSS: false,
+	    	// Before you go to change slides, make sure you can!
+	    	before: function(){			    		
+	    		if(!canSlide)
+	    			slider.flexslider("stop");
+	    	}
+		});
+
+	/*slider.on("click", ".flex-prev, .flex-next", function(){
+		canSlide = true;
+		$('.flexslider iframe').each(function(){
+			$(this).data('player').pauseVideo();
+		});
+	});*/
+  
+    jQuery('.flexslider li img').click(function(){
+      var url = jQuery(this).attr('data-url');
+      if (url.length > 0) {window.location.href = url;}
+    });
+});
+</script>
+{% endif %}

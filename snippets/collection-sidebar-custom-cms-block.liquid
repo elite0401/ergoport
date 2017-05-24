@@ -1,0 +1,20 @@
+<div class="sidebar-cms-custom">
+  {% if settings.custom_cms_title != blank %}
+  <div class="widget-title">
+    <h3>
+      {% if settings.enable_multilang %}
+        <span class="lang1">{{ settings.custom_cms_title | split: '|' | first }}</span>
+        <span class="lang2">{{ settings.custom_cms_title | split: '|' | last }}</span>
+      {% else %}
+      	<span>{{ settings.custom_cms_title | split: '|' | first }}</span>
+      {% endif %}
+    </h3>
+  </div>
+  {% endif %}
+  {% if settings.enable_multilang %}
+    <div class="widget-content lang1">{{ settings.custom_cms_text | split: '|' | first }}</div>
+    <div class="widget-content lang2">{{ settings.custom_cms_text | split: '|' | last }}</div>
+  {% else %}
+  	<div class="widget-content">{{ settings.custom_cms_text | split: '|' | first }}</div>
+  {% endif %}
+</div>

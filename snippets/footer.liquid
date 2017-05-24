@@ -1,0 +1,99 @@
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-top"> 
+      <div class="row">
+        {% if settings.footer_column_1_title != blank %}
+        <div class="col-1 wow fadeInUp" data-wow-delay="{{ settings.time_lazy_load }}ms">
+          {% if settings.enable_multilang %}
+            <h3 class="lang1">{{ settings.footer_column_1_title | split: '|' | first }}</h3>
+            <h3 class="lang2">{{ settings.footer_column_1_title | split: '|' | last }}</h3>
+          {% else %}
+          	<h3>{{ settings.footer_column_1_title | split: '|' | first }}</h3>
+          {% endif %}
+          
+          <ul>
+            {% assign footerCol1 = settings.footer_column_1_title | handleize %}
+            {% for link in linklists.[footerCol1].links %}
+              {% if settings.enable_multilang %}
+                <li class="lang1">{{ link.title | split: '|' | first | link_to: link.url }}</li>
+                <li class="lang2">{{ link.title | split: '|' | last | link_to: link.url }}</li>
+              {% else %}
+              	<li>{{ link.title | split: '|' | first | link_to: link.url }}</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        
+        {% if settings.footer_column_2_title != blank %}
+        <div class="col-2 wow fadeInUp" data-wow-delay="{{ settings.time_lazy_load | times: 2 }}ms">
+          {% if settings.enable_multilang %}
+            <h3 class="lang1">{{ settings.footer_column_2_title | split: '|' | first }}</h3>
+            <h3 class="lang2">{{ settings.footer_column_2_title | split: '|' | last }}</h3>
+          {% else %}
+          	<h3>{{ settings.footer_column_2_title | split: '|' | first }}</h3>
+          {% endif %}
+          <ul>
+            {% assign footerCol2 = settings.footer_column_2_title | handleize %}
+            {% for link in linklists.[footerCol2].links %}
+              {% if settings.enable_multilang %}
+                <li class="lang1">{{ link.title | split: '|' | first | link_to: link.url }}</li>
+                <li class="lang2">{{ link.title | split: '|' | last | link_to: link.url }}</li>
+              {% else %}
+              	<li>{{ link.title | split: '|' | first | link_to: link.url }}</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        {% if settings.footer_column_3_title != blank %}
+        <div class="col-3 wow fadeInUp" data-wow-delay="{{ settings.time_lazy_load | times: 3 }}ms">
+          {% if settings.enable_multilang %}
+            <h3 class="lang1">{{ settings.footer_column_3_title | split: '|' | first }}</h3>
+            <h3 class="lang2">{{ settings.footer_column_3_title | split: '|' | last }}</h3>
+          {% else %}
+          	<h3>{{ settings.footer_column_3_title | split: '|' | first }}</h3>
+          {% endif %}
+          <ul>
+            {% assign footerCol3 = settings.footer_column_3_title | handleize %}
+            {% for link in linklists.[footerCol3].links %}
+              {% if settings.enable_multilang %}
+                <li class="lang1">{{ link.title | split: '|' | first | link_to: link.url }}</li>
+                <li class="lang2">{{ link.title | split: '|' | last | link_to: link.url }}</li>
+              {% else %}
+              	<li>{{ link.title | split: '|' | first | link_to: link.url }}</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        <div class="col-4 wow fadeInUp last" data-wow-delay="{{ settings.time_lazy_load | times: 4 }}ms">
+          {% if settings.enable_multilang %}
+            <h3 class="lang1">{{ settings.footer_column_4_title | split: '|' | first }}</h3>
+            <h3 class="lang2">{{ settings.footer_column_4_title | split: '|' | last }}</h3>
+          {% else %}
+          	<h3>{{ settings.footer_column_4_title | split: '|' | first }}</h3>
+          {% endif %}
+          {% include 'social' %}
+          {% include 'homepage-block-newsletter' %}
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom  wow fadeInUp" data-wow-delay="{{ settings.time_lazy_load | times: 5 }}ms">
+      {% if settings.display_footer_address and settings.footer_address_code != blank %}
+        {% if settings.enable_multilang %}
+          <address class="lang1">{{ settings.footer_address_code | split: '|' | first }}</address>
+          <address class="lang2">{{ settings.footer_address_code | split: '|' | last }}</address>
+        {% else %}
+      	  <address>{{ settings.footer_address_code | split: '|' | first }}</address>
+        {% endif %}
+      {% endif %}
+      
+      {% comment %}
+        Loop through available payment methods and show their icons.
+      {% endcomment %}
+      {% include 'payment_methods' %}          
+    </div>
+  </div>
+</footer>
+{% include 'message-modal' %}

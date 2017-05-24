@@ -1,0 +1,229 @@
+{% comment %}
+Refined tags
+{% endcomment %}
+{% if current_tags == blank %}
+{% assign has_refined = false %}
+{% else %}
+{% assign has_refined = true %} 
+{% endif %}
+<div class="refined-widgets">
+  <span {% if settings.enable_multilang %}data-translate="collections.sidebar.refined_by"{% endif %}>{{ 'collections.sidebar.refined_by' | t}}</span>
+  <a href="javascript:void(0)" class="clear-all" {% if has_refined == false %}style="display:none"{% endif %} {% if settings.enable_multilang %}data-translate="collections.sidebar.clear_all"{% endif %}>
+    {{ 'collections.sidebar.clear_all' | t }}
+  </a>
+  {% comment %}
+  <ul>    
+  {% if collection.handle != 'all' %}
+    <li><a href="javascript:void(0)" class="selected-collection">{{collection.title}}<span>X</span></a></li>
+  {% endif %}
+  {% for t in current_tags %}
+    {% assign tag = t | strip %}
+    {% assign tag_value = tag | handleize %}
+    <li><a href="{{tag_value}}" class="selected-tag">{{tag}}<span>X</span></a></li>
+  {% endfor %}
+  </ul>{% endcomment %}
+</div>
+
+<div class="sidebar-block">
+{% if settings.enable_shop_by_tags_1 %}
+<div class="sidebar-custom sidebar-tag color">
+  {% assign tags = settings.shop_by_tags_1_list_tags | split: ',' %}
+  <div class="widget-title">
+    <h3>
+      {% if settings.enable_multilang %}
+        <span class="lang1">{{ settings.shop_by_tags_1_title | split: '|' | first }}</span>
+        <span class="lang2">{{ settings.shop_by_tags_1_title | split: '|' | last }}</span>
+      {% else %}
+        <span>{{ settings.shop_by_tags_1_title | split: '|' | first }}</span>
+      {% endif %}
+      <a href="javascript:void(0)" class="clear" style="display:none" {% if settings.enable_multilang %}data-translate="collections.sidebar.clear"{% endif %}>
+        {{ 'collections.sidebar.clear' | t }}
+      </a>
+    </h3>
+  </div>
+  <div class="widget-content">
+    <ul>
+      {% for i in (1..20) %}
+        {% capture shop_by_color_text %}shop_by_color_text_{{ i }}{% endcapture %}
+        {% capture color %}color-{{ i }}.png{% endcapture %}
+      
+        {% if settings[shop_by_color_text] != blank %}
+          {% assign tag = settings[shop_by_color_text] | strip %} 
+          {% if collection.tags contains tag %} 
+            <li>
+              {% assign tag_value = tag | handleize %}
+              <input type="checkbox" value="{{ tag_value }}" {% if current_tags contains tag %}checked{% endif %}/>
+              <a href="javascript:void(0)"  {% if current_tags contains tag %} class="active" {% endif %} title="{{tag}}">
+                <img src="{{ color | asset_url }}" alt=""/>
+              </a>
+            </li>
+        {% endif %}
+        {% endif %}      
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %}
+
+{% if settings.enable_shop_by_tags_2 %}
+<div class="sidebar-custom sidebar-tag size">
+  {% assign tags = settings.shop_by_tags_2_list_tags | split: ',' %}
+  <div class="widget-title">
+    <h3>
+      {% if settings.enable_multilang %}
+        <span class="lang1">{{ settings.shop_by_tags_2_title | split: '|' | first }}</span>
+        <span class="lang2">{{ settings.shop_by_tags_2_title | split: '|' | last }}</span>
+      {% else %}
+        <span>{{ settings.shop_by_tags_2_title | split: '|' | first }}</span>
+      {% endif %}
+      <a href="javascript:void(0)" class="clear" style="display:none" {% if settings.enable_multilang %}data-translate="collections.sidebar.clear"{% endif %}>
+        {{ 'collections.sidebar.clear' | t }}
+      </a>
+    </h3>
+  </div>
+  <div class="widget-content">
+    <ul>
+      {% for t in tags %}
+      {% assign tag = t | strip %}
+      {% assign tag_value = tag | handleize %}      
+      {% if current_tags contains tag %}
+      <li>
+        {% if settings.enable_multilang %}
+          <input type="checkbox" class="lang1" value="{{ tag_value | split: '|' | first }}" checked/>
+          <label class="lang1">{{ tag | split: '|' | first }}</label>
+          <input type="checkbox" class="lang2" value="{{ tag_value | split: '|' | last }}" checked/>
+          <label class="lang2">{{ tag | split: '|' | last }}</label>
+        {% else %}
+          <input type="checkbox" value="{{ tag_value | split: '|' | first }}" checked/>
+          <label>{{ tag | split: '|' | first }}</label>
+        {% endif %}
+      </li>
+      {% else %}
+        {% if collection.tags contains tag %} 
+          <li>
+          {% if settings.enable_multilang %}
+            <input type="checkbox" class="lang1" value="{{ tag_value | split: '|' | first }}"/>
+            <label class="lang1">{{ tag | split: '|' | first }}</label>
+            <input type="checkbox" class="lang2" value="{{ tag_value | split: '|' | last }}"/>
+            <label class="lang2">{{ tag | split: '|' | last }}</label>
+          {% else %}
+            <input type="checkbox" value="{{ tag_value | split: '|' | first }}"/>
+            <label>{{ tag | split: '|' | first }}</label>
+          {% endif %}
+          </li>
+        {% endif %}
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %}
+
+{% if settings.enable_shop_by_tags_3 %}
+<div class="sidebar-custom sidebar-tag">
+  {% assign tags = settings.shop_by_tags_3_list_tags | split: ',' %}
+  <div class="widget-title">
+    <h3>
+      {% if settings.enable_multilang %}
+        <span class="lang1">{{ settings.shop_by_tags_3_title | split: '|' | first }}</span>
+        <span class="lang2">{{ settings.shop_by_tags_3_title | split: '|' | last }}</span>
+      {% else %}
+        <span>{{ settings.shop_by_tags_3_title | split: '|' | first }}</span>
+      {% endif %}
+      <a href="javascript:void(0)" class="clear" style="display:none" {% if settings.enable_multilang %}data-translate="collections.sidebar.clear"{% endif %}>
+        {{ 'collections.sidebar.clear' | t }}
+      </a>
+    </h3>
+  </div>
+  <div class="widget-content">
+    <ul>
+      {% for t in tags %}
+      {% assign tag = t | strip %}
+      {% assign tag_value = tag | handleize %}      
+      {% if current_tags contains tag %}
+      <li>
+        {% if settings.enable_multilang %}
+          <input type="checkbox" class="lang1" value="{{ tag_value | split: '|' | first }}" checked/>
+          <label class="lang1">{{ tag | split: '|' | first }}</label>
+          <input type="checkbox" class="lang2" value="{{ tag_value | split: '|' | last }}" checked/>
+          <label class="lang2">{{ tag | split: '|' | last }}</label>
+        {% else %}
+          <input type="checkbox" value="{{ tag_value | split: '|' | first }}" checked/>
+          <label>{{ tag | split: '|' | first }}</label>
+        {% endif %}
+      </li>
+      {% else %}
+        {% if collection.tags contains tag %} 
+          <li>
+          {% if settings.enable_multilang %}
+            <input type="checkbox" class="lang1" value="{{ tag_value | split: '|' | first }}"/>
+            <label class="lang1">{{ tag | split: '|' | first }}</label>
+            <input type="checkbox" class="lang2" value="{{ tag_value | split: '|' | last }}"/>
+            <label class="lang2">{{ tag | split: '|' | last }}</label>
+          {% else %}
+            <input type="checkbox" value="{{ tag_value | split: '|' | first }}"/>
+            <label>{{ tag | split: '|' | first }}</label>
+          {% endif %}
+          </li>
+        {% endif %}
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %}
+
+{% if settings.enable_shop_by_tags_4 %}
+<div class="sidebar-custom sidebar-tag">
+  {% assign tags = settings.shop_by_tags_4_list_tags | split: ',' %}
+  <div class="widget-title">
+    <h3>
+      {% if settings.enable_multilang %}
+        <span class="lang1">{{ settings.shop_by_tags_4_title | split: '|' | first }}</span>
+        <span class="lang2">{{ settings.shop_by_tags_4_title | split: '|' | last }}</span>
+      {% else %}
+        <span>{{ settings.shop_by_tags_4_title | split: '|' | first }}</span>
+      {% endif %}
+      <a href="javascript:void(0)" class="clear" style="display:none" {% if settings.enable_multilang %}data-translate="collections.sidebar.clear"{% endif %}>
+        {{ 'collections.sidebar.clear' | t }}
+      </a>
+    </h3>
+  </div>
+  <div class="widget-content">
+    <ul>
+      {% for t in tags %}
+      {% assign tag = t | strip %}
+      {% assign tag_value = tag | handleize %}      
+      {% if current_tags contains tag %}
+      <li>
+        {% if settings.enable_multilang %}
+          <input type="checkbox" class="lang1" value="{{ tag_value | split: '|' | first }}" checked/>
+          <label class="lang1">{{ tag | split: '|' | first }}</label>
+          <input type="checkbox" class="lang2" value="{{ tag_value | split: '|' | last }}" checked/>
+          <label class="lang2">{{ tag | split: '|' | last }}</label>
+        {% else %}
+          <input type="checkbox" value="{{ tag_value | split: '|' | first }}" checked/>
+          <label>{{ tag | split: '|' | first }}</label>
+        {% endif %}
+      </li>
+      {% else %}      	
+        {% if collection.tags contains tag %} 
+          <li>
+          {% if settings.enable_multilang %}
+            <input type="checkbox" class="lang1" value="{{ tag_value | split: '|' | first }}"/>
+            <label class="lang1">{{ tag | split: '|' | first }}</label>
+            <input type="checkbox" class="lang2" value="{{ tag_value | split: '|' | last }}"/>
+            <label class="lang2">{{ tag | split: '|' | last }}</label>
+          {% else %}
+            <input type="checkbox" value="{{ tag_value | split: '|' | first }}"/>
+            <label>{{ tag | split: '|' | first }}</label>
+          {% endif %}
+          </li> 
+      	{% endif %}
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %}
+</div>

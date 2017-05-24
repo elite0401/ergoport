@@ -1,0 +1,47 @@
+{% if settings.display_social %}      
+
+{% comment %}
+Loop through the persistent theme settings and list out each social network link.
+{% endcomment %}
+
+<ul class="social">
+  {% if settings.footer_social_link_1 != blank %}
+  <li class="facebook">
+    <a href="{{ settings.footer_social_link_1 }}" title="Facebook"><span>Facebook</span></a>
+  </li>
+  {% endif %}
+  {% if settings.footer_social_link_2 != blank %}
+  <li class="twitter">
+    <a href="{{ settings.footer_social_link_2 }}" title="Twitter"><span>Twitter</span></a>
+  </li>
+  {% endif %}
+  {% if settings.footer_social_link_3 != blank %}
+  <li class="google">
+    <a href="{{ settings.footer_social_link_3 }}" title="Google +"><span>Google</span></a>
+  </li>
+  {% endif %}
+  {% if settings.footer_social_link_4 != blank %}
+  <li class="instagram">
+    <a href="{{ settings.footer_social_link_4 }}" title="Instagram"><span>Instagram</span></a>
+  </li>
+  {% endif %}
+  {% if settings.footer_social_link_5 != blank %}
+  <li class="rss">
+    <a href="{{ settings.footer_social_link_5 }}" title="Rss"><span>Rss</span></a>
+  </li>
+  {% endif %}
+  {% if settings.footer_social_link_6 != blank %}
+  <li class="pinterest">
+    <a href="{{ settings.footer_social_link_6 }}" title="Pinterest"><span>Pinterest</span></a>
+  </li>
+  {% endif %}
+</ul>
+
+{% if settings.fb_like_code != blank %}
+<div class="text">
+  <h3>{{ 'text-title.png' | asset_url | img_tag }}</h3>  
+  {{ settings.fb_like_code }}
+</div>
+{% endif %}
+
+{% endif %}

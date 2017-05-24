@@ -1,0 +1,146 @@
+{% include 'breadcrumb' %}
+<header class="page-header">
+  {% if settings.enable_multilang %}
+  <h2 class="lang1">{{ page.title | split: '|' | first }}</h2>
+  <h2 class="lang2">{{ page.title | split: '|' | last }}</h2>
+  {% else %}
+  <h2>{{ page.title | split: '|' | first }}</h2>   
+  {% endif %}  
+</header>
+
+{% comment %}
+  Regular page content goes here.
+{% endcomment %}
+<div class="rte">
+  <section class="lookbook">
+    {% if settings.display_lb_slideshow %}
+    <div class="flexslider">
+      <ul class="slides">
+        {% for i in (1..10) %}
+        {% capture display_slideshow %}display_lb_slideshow_{{ i }}{% endcapture %}
+        {% capture slide %}lb_slideshow_{{ i }}.jpg{% endcapture %}
+        {% capture link %}lb_image_{{ i }}_link{% endcapture %}
+        {% capture alt %}lb_image_{{ i }}_alt{% endcapture %}
+        {% capture textsample %}lb_text_sample_{{ i }}{% endcapture %}
+        {% capture textsamplesize %}lb_text_sample_size_{{ i }}{% endcapture %}
+        {% capture textsamplecolor %}lb_text_sample_color_{{ i }}{% endcapture %}        
+        {% capture slideheading %}lb_slide_heading_{{ i }}{% endcapture %}
+        {% capture slideheadingsize %}lb_slide_heading_size_{{ i }}{% endcapture %}
+        {% capture slideheadingcolor %}lb_slide_heading_color_{{ i }}{% endcapture %}
+        {% capture slidetextsize %}lb_slide_text_size_{{ i }}{% endcapture %}
+        {% capture slidetextcolor %}lb_slide_text_color_{{ i }}{% endcapture %}
+        {% capture slidetext %}lb_slide_text_{{ i }}{% endcapture %}
+        {% if settings[display_slideshow] %}
+        <li class="slide">
+          <img src="{{ slide | asset_url }}" data-url="{{ settings[link] }}" class="slide-img" alt="{{ settings[alt] }}" />
+          <div class="slide-des">
+            {% if settings[textsample] != blank %}
+            <p class="text-sample" style="
+                                             {% if settings[textsamplesize] != blank %} 
+                                             font-size: {{settings[textsamplesize]}}px;
+                                             {% endif %}
+                                             {% if settings[textsamplecolor] != blank %} 
+                                             color: {{settings[textsamplecolor]}};
+                                             {% endif %}"
+                >
+              {% if settings.enable_multilang %}
+              <span class="lang1">{{ settings[textsample] | split: '|' | first }}</span>
+              <span class="lang2">{{ settings[textsample] | split: '|' | last }}</span>
+              {% else %}
+              <span>{{ settings[textsample] | split: '|' | first }}</span>              
+              {% endif %}
+            </p>
+            {% endif %}
+            
+            {% if settings[slideheading] != blank %}
+            <h2 class="slide-heading" style="
+                                             {% if settings[slideheadingsize] != blank %} 
+                                             font-size: {{settings[slideheadingsize]}}px;
+                                             {% endif %}
+                                             {% if settings[slideheadingcolor] != blank %} 
+                                             color: {{settings[slideheadingcolor]}};
+                                             {% endif %}"
+                >
+              {% if settings.enable_multilang %}
+              <span class="lang1">{{ settings[slideheading] | split: '|' | first }}</span>
+              <span class="lang2">{{ settings[slideheading] | split: '|' | last }}</span>
+              {% else %}
+              <span>{{ settings[slideheading] | split: '|' | first }}</span>              
+              {% endif %}
+            </h2>
+
+            <p class="line" style="
+                                   {% if settings[slideheadingcolor] != blank %} 
+                                   background-color: {{settings[slideheadingcolor]}};
+                                   {% endif %}"
+               >&nbsp;</p>
+            {% endif %}
+            
+            {% if settings[slidetext] != blank %}
+            <p class="slide-text" style="
+                                         {% if settings[slidetextsize] != blank %} 
+                                         font-size: {{settings[slidetextsize]}}px;
+                                         {% endif %}
+                                         {% if settings[slidetextcolor] != blank %} 
+                                         color: {{settings[slidetextcolor]}};
+                                         {% endif %}"
+               >
+              {% if settings.enable_multilang %}
+              <span class="lang1">{{ settings[slidetext] | split: '|' | first }}</span>
+              <span class="lang2">{{ settings[slidetext] | split: '|' | last }}</span>
+              {% else %}
+              <span>{{ settings[slidetext] | split: '|' | first }}</span>              
+              {% endif %}
+            </p>
+            {% endif %}
+          </div>
+        </li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+    </div><!-- /.flexslider -->
+  
+    <script>
+      /* Flex Slider */    
+        jQuery('.flexslider').flexslider({
+          directionNav: true,
+          controlNav: true,
+          keyboardNav: true,
+          slideshowSpeed: {{ settings.lb_slideshow_speed }},
+          animation: "{{ settings.lb_slideshow_transition }}",
+          prevText: 'Previous',
+          nextText: 'Next'
+        });
+        jQuery('.flexslider li img').click(function(){
+          var url = jQuery(this).attr('data-url');
+          if (url.length > 0) {window.location.href = url;}
+        });     
+      /* End Flex Slider */
+    </script>
+    {% endif %}
+  
+    {% if settings.display_lb_social %}
+    <div class="footer-top">
+      <ul class="social">
+        <li class="facebook"><a href="{{ settings.lb_social_link_1 }}" title="FaceBook">FaceBook</a></li>
+        <li class="google"><a href="{{ settings.lb_social_link_2 }}" title="Google +">Google +</a></li>
+        <li class="twitter"><a href="{{ settings.lb_social_link_3 }}" title="Twitter">Twitter</a></li>
+        <li class="instagram"><a href="{{ settings.lb_social_link_4 }}" title="Instagram">Instagram</a></li>
+      </ul>
+    </div>
+    {% endif %}
+    
+    {% if settings.display_lb_button %}
+    <p class="bottom">
+      <a href="{{ settings.lb_button_link }}" class="btn">
+        {% if settings.enable_multilang %}
+        <span class="lang1">{{ settings.lb_button_text | split: '|' | first }}</span>
+        <span class="lang2">{{ settings.lb_button_text | split: '|' | last }}</span>
+        {% else %}
+        <span>{{ settings.lb_button_text | split: '|' | first }}</span>  
+        {% endif %}
+      </a>
+    </p>
+    {% endif %}
+  </section>
+</div>

@@ -1,0 +1,141 @@
+{{ '//ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js' | script_tag }}
+{{ 'jquery.products.min.js' | asset_url | script_tag }}
+
+<section class="recently-viewed-products">
+  {% if settings.recently_viewed_products_title != '' %}
+    {% if settings.enable_multilang %}
+    <h2 class="lang1">{{ settings.recently_viewed_products_title | split: '|' | first }}</h2>
+    <h2 class="lang2">{{ settings.recently_viewed_products_title | split: '|' | last }}</h2>
+    {% else %}
+    <h2>{{ settings.recently_viewed_products_title | split: '|' | first }}</h2>
+    {% endif %}
+  {% endif %}
+  <div class="products-grid owl-carousel row" id="recently-viewed-products-grid">
+  </div>
+</section>
+
+{% if settings.enable_multilang %}
+<script>
+  function splitTitle(title) {
+    if (title.indexOf("|") < 0) 
+      return title;
+    var titleArr = title.split("|");
+    return titleArr[translator.current_lang - 1];
+  }
+</script>
+{% endif %}
+
+{% raw %}
+<script id="recently-viewed-product-grid-template"  type="text/x-jquery-tmpl">
+{% endraw %}
+<div class="{% if settings.prouduct_item_no_hover %}product-item-no-hover {% endif %}{% if settings.product_image_border%}grid-item-border {% endif %}{% if settings.product_image_crop%} crop_image{% else %} no_crop_image{% endif %} grid-item{% raw %} col-xs-6 col-sm-4 col">
+  <div id="product-${id}" class="inner product-item{{if !available}} sold-out {{/if}}{{if compare_at_price_min > price_min}} on-sale {{/if}}">
+    <div class="inner-top">
+      <div class="product-top">
+        <div class="product-image">
+          <a href="${url}" class="product-grid-image">
+            <img src="${Shopify.Products.resizeImage(featured_image, "large")}" alt="${featured_image.alt}"/>
+            <div class="hover"></div>
+          </a>
+        </div>
+        
+        {{if compare_at_price_min > price_min || !available}}
+        <div class="product-label">
+          {{if compare_at_price_min > price_min}} 
+            <strong class="label" {% endraw %}{% if settings.enable_multilang %}data-translate="products.product.sale"{% endif %}>{{ 'products.product.sale' | t }}{% raw %}</strong>
+          {{/if}}
+          {{if !available}}
+            <strong class="sold-out-label" {% endraw %}{% if settings.enable_multilang %}data-translate="products.product.sold_out"{% endif %}>{{ 'products.product.sold_out' | t }}{% raw %}</strong>
+          {{/if}}
+        </div>
+        {{/if}}
+      </div>
+  
+      <div class="product-bottom">
+        {% endraw %}
+        {% if settings.enable_multilang %}
+        {% raw %}
+          <a class="product-title" href="${url}">${splitTitle(title)}</a>
+        {% endraw %}
+        {% else %}
+        {% raw %}
+          <a class="product-title" href="${url}">${title}</a>
+        {% endraw %}
+        {% endif %}
+        {% raw %}
+
+        <span class="shopify-product-reviews-badge" data-id="${id}"></span>
+
+        <div class="price-box">   
+        {{if compare_at_price_min > price_min}} 
+          <p class="sale">
+            <span class="old-price"> {{html Shopify.formatMoney(compare_at_price_min, window.money_format)}}</span>
+            <span class="special-price">{{if price_varies}}{% endraw %}{% include 'varies_from' %}{% raw %}{{/if}}{{html Shopify.formatMoney(price_min, window.money_format)}}</span>
+            </p>
+        {{else}}
+          <p class="regular-product">
+            <span >{{if price_varies}}{% endraw %}{% include 'varies_from' %}{% raw %}{{/if}}{{html Shopify.formatMoney(price_min, window.money_format)}}</span>
+          </p>
+        {{/if}}
+        </div>
+    
+        <div class="action">
+          <form action="/cart/add" method="post" class="variants" id="product-actions-${id}" enctype="multipart/form-data" style="padding:0px;">    
+            {{if !available}} 
+            <input class="btn add-to-cart-btn" type="submit" {% endraw %}{% if settings.enable_multilang %}data-translate="products.product.unavailable"{% endif %} value="{{ 'products.product.unavailable' | t }}{% raw %}" disabled="disabled"/>
+            {{else variants.length > 1 }}
+            <input class="btn" type="button" onclick="window.location.href='${url}'" {% endraw %}{% if settings.enable_multilang %}data-translate="products.product.select_options"{% endif %} value="{{ 'products.product.select_options' | t }}{% raw %}"/>
+            {{else}}
+            <input type="hidden" name="id" value="${variants[0].id}" />      
+            <input class="btn add-to-cart-btn" type="submit" {% endraw %}{% if settings.enable_multilang %}data-translate="products.product.add_to_cart"{% endif %} value="{{ 'products.product.add_to_cart' | t }}{% raw %}"/>
+            {{/if}}
+          </form>
+        </div>    
+      </div>
+    </div>
+  </div>
+</div>
+</script>
+{% endraw %}
+
+<script>
+Shopify.Products.showRecentlyViewed({ 
+  howManyToShow: {{ settings.number_of_recently_viewed_products }}, 
+  wrapperId: 'recently-viewed-products-grid', 
+  templateId: 'recently-viewed-product-grid-template',
+  onComplete: function() {
+    if (jQuery("#recently-viewed-products-grid").children().length > 0) {
+      jQuery(".recently-viewed-products").show();
+      if (window.product_image_resize) {
+          jQuery('#recently-viewed-products-grid img').fakecrop({ 
+            fill: window.images_size.is_crop,
+            widthSelector: ".products-grid .product-image",
+            ratioWrapper: window.images_size
+          });
+      }
+  
+      if (window.show_multiple_currencies) {
+         Currency.convertAll(window.shop_currency, jQuery('#currencies').val(), 'span.money', 'money_format');
+      }
+  
+      {% if settings.enable_multilang %}
+  	  if (translator.current_lang == 2)
+  	  	translator.doTranslate(".recently-viewed-products");
+      {% endif %}
+  
+      jQuery("#recently-viewed-products-grid").owlCarousel({
+        autoPlay: 8000,     
+        scrollPerPage: true,
+        slideSpeed: 500,
+        stopOnHover: true,     
+        navigation: true,
+        itemsTablet: [767,3],
+        itemsTabletSmall: [721,2]
+      });
+      if (jQuery(".spr-badge").length>0) {
+          return window.SPR.registerCallbacks(), window.SPR.initRatingHandler(), window.SPR.initDomEls(), window.SPR.loadProducts(), window.SPR.loadBadges();
+      }      
+    }    
+  }
+});
+</script>

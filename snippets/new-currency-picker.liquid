@@ -1,0 +1,23 @@
+{% if settings.enable_multiple_currencies %}
+<select id="currencies">
+  {% assign currency_1_length = settings.currency_1_unit | size %}
+  {% if currency_1_length > 0 %}
+  <option data-currency="{{settings.currency_1_unit}}" {% if shop.currency == settings.currency_1_unit %} selected {% endif %} value="{{settings.currency_1_unit}}">{{settings.currency_1_unit}}</option> 
+  {% endif %}
+  {% assign currency_2_length = settings.currency_2_unit | size %}
+  {% if currency_2_length > 0 %}
+  <option data-currency="{{settings.currency_2_unit}}" {% if shop.currency == settings.currency_2_unit %} selected {% endif %} value="{{settings.currency_2_unit}}">{{settings.currency_2_unit}}</option> 
+  {% endif %}
+  {% assign currency_3_length = settings.currency_3_unit | size %}
+  {% if currency_3_length > 0 %}
+  <option data-currency="{{settings.currency_3_unit}}" {% if shop.currency == settings.currency_3_unit %} selected {% endif %} value="{{settings.currency_3_unit}}">{{settings.currency_3_unit}}</option> 
+  {% endif %}
+  {% assign currency_4_length = settings.currency_4_unit | size %}
+  {% if currency_4_length > 0 %}
+  <option data-currency="{{settings.currency_4_unit}}" {% if shop.currency == settings.currency_4_unit %} selected {% endif %} value="{{settings.currency_4_unit}}">{{settings.currency_4_unit}}</option> 
+  {% endif %}
+</select>
+<div id="currencies-modal" style="display:none">
+  <div {% if settings.enable_multilang %}data-translate="general.currency.change_text"{% endif %}>{{ 'general.currency.change_text' | t }}</div><span></span>
+</div>
+{% endif %}

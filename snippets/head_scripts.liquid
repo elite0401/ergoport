@@ -1,0 +1,37 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+{{ 'jquery-cookie.min.js' | asset_url | script_tag }}
+{{ 'selectize.min.js' | asset_url | script_tag }}
+{{ 'jquery.flexslider-min.js' | asset_url | script_tag }}
+
+<script>
+  window.ajax_cart = {{settings.ajax_cart}};
+  window.money_format = "{{shop.money_with_currency_format}}";
+  window.shop_currency = "{{ shop.currency }}";
+  window.show_multiple_currencies = {{settings.enable_multiple_currencies}};
+  window.loading_url = "{{ 'loading.gif' | asset_url}}"; 
+  window.use_color_swatch = {{ settings.use_color_swatch }};
+  window.product_image_resize = {{settings.product_image_resize}};
+  window.enable_sidebar_multiple_choice = {{ settings.enable_sidebar_multiple_choice}};
+  window.dropdowncart_type = "{{ settings.dropdowncart_type }}";
+  window.file_url = "{{''|file_url}}";
+  window.asset_url = "{{''|asset_url}}";
+  window.images_size = {
+    is_crop: {{ settings.product_image_crop }},
+    ratio_width : {{ settings.product_image_ratio_width }},
+    ratio_height : {{ settings.product_image_ratio_height }},
+  };
+  window.inventory_text = {
+    in_stock: "{{ 'products.product.in_stock' | t }}",
+    many_in_stock: "{{ 'products.product.many_in_stock' | t }}",
+    out_of_stock: "{{ 'products.product.out_of_stock' | t }}",
+    add_to_cart: "{{ 'products.product.add_to_cart' | t }}",
+    sold_out: "{{ 'products.product.sold_out' | t }}",
+    unavailable: "{{ 'products.product.unavailable' | t }}"
+  };
+          
+  window.multi_lang = {{settings.enable_multilang}};
+</script>
+
+{% if settings.enable_multilang %}
+    {% include 'translator' %}
+{% endif %}

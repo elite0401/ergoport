@@ -1,0 +1,66 @@
+{% if settings.display_brands_slider %}
+<section class="slider-brand-wrapper container wow fadeIn">
+  <div id="slide_brand" class="owl-carousel slide_brand col-xs-12"><!-- BEGIN of brand BRAND -->
+    {% if settings.brands_slider_image_1_link != blank %}
+    <div class="item">
+      <a title="{{ settings.brands_slider_image_1_title }}" href="{{ settings.brands_slider_image_1_link }}">{{ 'brand1.png' | asset_url | img_tag }}</a>
+    </div>
+    {% endif %}
+    {% if settings.brands_slider_image_2_link != blank %}
+    <div class="item">
+      <a title="{{ settings.brands_slider_image_2_title }}" href="{{ settings.brands_slider_image_2_link }}">{{ 'brand2.png' | asset_url | img_tag }}</a>
+    </div>
+    {% endif %}
+    {% if settings.brands_slider_image_3_link != blank %}
+    <div class="item">
+      <a title="{{ settings.brands_slider_image_3_title }}" href="{{ settings.brands_slider_image_3_link }}">{{ 'brand3.png' | asset_url | img_tag }}</a>
+    </div>
+    {% endif %}
+    {% if settings.brands_slider_image_4_link != blank %}
+    <div class="item">
+      <a title="{{ settings.brands_slider_image_4_title }}" href="{{ settings.brands_slider_image_4_link }}">{{ 'brand4.png' | asset_url | img_tag }}</a>
+    </div>
+    {% endif %}
+    {% if settings.brands_slider_image_5_link != blank %}
+    <div class="item">
+      <a title="{{ settings.brands_slider_image_5_title }}" href="{{ settings.brands_slider_image_5_link }}">{{ 'brand5.png' | asset_url | img_tag }}</a>
+    </div>
+    {% endif %}
+    {% if settings.brands_slider_image_6_link != blank %}
+    <div class="item">
+      <a title="{{ settings.brands_slider_image_6_title }}" href="{{ settings.brands_slider_image_6_link }}">{{ 'brand6.png' | asset_url | img_tag }}</a>
+    </div>
+    {% endif %}
+    {% if settings.brands_slider_image_7_link != blank %}
+    <div class="item">
+      <a title="{{ settings.brands_slider_image_7_title }}" href="{{ settings.brands_slider_image_7_link }}">{{ 'brand7.png' | asset_url | img_tag }}</a>
+    </div>
+    {% endif %}
+    {% if settings.brands_slider_image_8_link != blank %}
+    <div class="item">
+      <a title="{{ settings.brands_slider_image_8_title }}" href="{{ settings.brands_slider_image_8_link }}">{{ 'brand8.png' | asset_url | img_tag }}</a>
+    </div>
+    {% endif %}
+    {% if settings.brands_slider_image_9_link != blank %}
+    <div class="item">
+      <a title="{{ settings.brands_slider_image_9_title }}" href="{{ settings.brands_slider_image_9_link }}">{{ 'brand9.png' | asset_url | img_tag }}</a>
+    </div>
+    {% endif %}
+    {% if settings.brands_slider_image_10_link != blank %}
+    <div class="item">
+      <a title="{{ settings.brands_slider_image_10_title }}" href="{{ settings.brands_slider_image_10_link }}">{{ 'brand10.png' | asset_url | img_tag }}</a>
+    </div>
+    {% endif %}
+  </div><!-- END of brand BRAND -->
+</section>
+
+<script>
+jQuery(document).ready(function() {
+  jQuery("#slide_brand").owlCarousel({
+    navigation : true,
+    itemsTablet: [768,3],
+    itemsTabletSmall: [650,2]
+  });
+});
+</script>
+{% endif %}

@@ -1,0 +1,101 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="ie9 no-js"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+
+  <!-- Basic page needs ================================================== -->
+  <meta charset="utf-8">
+
+  <!-- Title and description ================================================== -->
+  <title>
+  {{ page_title }}{% if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} &ndash; Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+  </title>
+
+  {% if page_description %}
+  <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  <!-- Product meta ================================================== -->
+  {% include 'fb-open-graph-tags' %}
+  {% include 'twitter-card' %}
+
+  <!-- Helpers ================================================== -->
+  <link rel="canonical" href="{{ canonical_url }}">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="{{ 'favicon.png' | asset_url }}" type="image/x-icon" />
+  
+   <!-- fonts -->
+  {% include 'head_fonts' %}
+  
+   <!-- Styles -->
+   {% include 'head_styles' %}
+  
+   <!-- Scripts -->
+  {% include 'head_scripts' %}
+
+  <!-- Header hook for plugins ================================================== -->
+  {{ content_for_header }}
+
+  <!--[if lt IE 9]>
+  {{ '//html5shiv.googlecode.com/svn/trunk/html5.js' | script_tag }}
+  <![endif]-->
+
+  {% comment %}
+    If you store has customers disabled, you can remove the following JS file
+  {% endcomment %}
+  {% if template contains 'customers' %}
+    {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+    {{ 'customer_area.js'  | shopify_asset_url | script_tag }}
+  {% endif %}
+
+</head>
+
+{% comment %}
+  Add the page template as a class for easy page or template specific styling.
+{% endcomment %}
+<body id="{{ page_title | handle }}" class=" {% if customer %}customer-logged-in {% endif %}template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}" >
+  <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-spmenu-s1">
+    <div class="gf-menu-device-wrapper">
+      <div class="gf-menu-device-container"></div>
+    </div>             
+  </nav>
+  <div class="wrapper-container">	
+	{% include 'header' %}
+      
+    <div class="quick-view"></div>
+
+    <main class="main-content {% if template contains 'index' or template contains 'contact' %}{% else %}container{% endif %}" role="main">
+      {{ content_for_layout }}
+    </main>
+
+    {% include 'footer' %}
+
+    {% if settings.enable_quick_view %}
+      {% include 'quick-view-template' %}
+    {% endif %}
+
+    {% include 'footer_scripts' %}
+    {% include 'newsletter' %}
+    <div id="back-top" style="display: none;"><a class="nav_up" href="#top">Back to top</a></div>
+  </div>
+
+  {% if settings.display_recently_viewed_products %}
+  <!-- Begin Recently Viewed Products -->
+  {{ '//ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js' | script_tag }}
+  {{ 'jquery.products.min.js' | asset_url | script_tag }}
+  {% if template contains 'product' %}
+  <script>
+  Shopify.Products.recordRecentlyViewed();
+  </script>
+  {% endif %}
+  <!-- End Recently Viewed Products -->
+  {% endif %}
+  {% include 'sweettooth-widgets' %}
+
+</body>
+</html>

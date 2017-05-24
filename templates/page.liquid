@@ -1,0 +1,20 @@
+{% include 'breadcrumb' %}
+<header class="page-header">
+  {% if settings.enable_multilang %}
+  <h2 class="lang1">{{ page.title | split: '|' | first }}</h2>
+  <h2 class="lang2">{{ page.title | split: '|' | last }}</h2>
+  {% else %}
+  <h2>{{ page.title | split: '|' | first }}</h2>
+  {% endif %}
+</header>
+
+{% comment %}
+  Regular page content goes here.
+{% endcomment %}
+
+{% if settings.enable_multilang %}
+<div class="rte lang1">{{ page.content | split: '[lang2]' | first }}</div>
+<div class="rte lang2">{{ page.content | split: '[lang2]' | last }}</div>
+{% else %}
+<div class="rte">{{ page.content | split: '[lang2]' | first }}</div>
+{% endif %}

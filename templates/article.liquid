@@ -1,0 +1,209 @@
+{% comment %}
+  Comments will not appear right after they are submitted, either to be checked for spam
+  or to await moderation. When a comment is submitted, the browser is redirected to a page
+  that includes the new comment id in its URL.
+    Example: http://shopname.myshopify.com/blogs/news/2022072-my-post?comment=3721372
+
+  More information:
+    - http://docs.shopify.com/themes/liquid-variables/comment
+{% endcomment %}
+
+{% comment %}
+  We're going to reference the number of comments below, so let's hold it in a variable.
+{% endcomment %}
+{% assign number_of_comments = article.comments_count %}
+
+{% comment %}
+  If a comment was just submitted and it has no blank fields, we have an extra comment to count.
+{% endcomment %}
+{% if comment and comment.created_at %}
+  {% assign number_of_comments = article.comments_count | plus: 1 %}
+{% endif %}
+
+{% include 'breadcrumb' %}
+<header class="page-header">
+  {% if current_tags %}
+    {% if settings.enable_multilang %}  
+    <h2 class="lang1">{{ blog.title | split: '|' | first | link_to: blog.url }} &raquo; {{ current_tags.first }}</h2>
+    <h2 class="lang2">{{ blog.title | split: '|' | last | link_to: blog.url }} &raquo; {{ current_tags.first }}</h2>
+    {% else %}
+    <h2>{{ blog.title | split: '|' | first | link_to: blog.url }} &raquo; {{ current_tags.first }}</h2>
+    {% endif %}
+  {% else %}
+    {% if settings.enable_multilang %}
+    <h2 class="lang1">{{ blog.title | split: '|' | first }}</h2>
+    <h2 class="lang2">{{ blog.title | split: '|' | last }}</h2>
+  	{% else %}
+  	<h2>{{ blog.title | split: '|' | first }}</h2>
+    {% endif %}
+  {% endif %}
+</header>
+
+<div class="row">
+  <!-- Begin sidebar -->
+  {% include 'blog_sidebar' %}
+  <!-- End sidebar -->
+
+  <div class="col-xs-9 blog-detail col-main">
+    <header class="page-header">
+      {% if settings.enable_multilang %}
+      <h1 class="lang1">{{ article.title | split: '|' | first }}</h1>
+      <h1 class="lang2">{{ article.title | split: '|' | last }}</h1>
+      {% else %}
+      <h1>{{ article.title | split: '|' | first }}</h1>
+      {% endif %}
+    </header>
+    
+      <p class="blog_author">
+        {% if blog.comments_enabled? %}
+        <a href="{{ article.url }}#comments" {% if settings.enable_multilang %}data-translate="blogs.comments.comments_with_count|count:{{article.comments_count}}"{%endif%}>
+          {{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}
+        </a><span class="separator">/</span>
+        {% endif %}
+
+        {% capture date %}<time datetime='{{ article.published_at | date: '%Y-%m-%d' }}'>{{ article.published_at | date: '%b %d, %Y' }}</time>{% endcapture %}
+        {% capture author %}{{ article.author }}{% endcapture %}
+        <span class="blog_author" {% if settings.enable_multilang %}data-translate="blogs.article.author_on_date_html|date:{{date}},author:{{author}}" translate-item="blog-date-author"{%endif%}>
+          {{ 'blogs.article.author_on_date_html' | t: date: date, author: author }}        
+        </span>
+      </p>
+    
+
+    {% if settings.enable_multilang %}
+    <div class="rte lang1">{{ article.content | split: '[lang2]' | first}}</div>
+    <div class="rte lang2">{{ article.content | split: '[lang2]' | last}}</div>
+    {% else %}
+    <div class="rte">{{ article.content | split: '[lang2]' | first}}</div>
+    {% endif %}
+
+    {% comment %}
+      Show off meta information like comments and tags.
+    {% endcomment %}
+    <ul class="user-tags">
+      {% include 'tags-article' %}
+    </ul>
+    
+	{% comment %}
+      Addthis
+    {% endcomment %}	
+	{% if settings.display_product_detail_share %}
+    {% include 'share' with article %}
+    {% endif %}
+
+    {% comment %}
+      Create links to the next and previous articles, if available.
+    {% endcomment %}
+
+    {% if blog.next_article or blog.previous_article %}
+
+    {% comment %}
+      If you only have elements floated in a container, you can use the
+      .clearfix class to force the parent to maintain its structure.
+    {% endcomment %}
+    <div class="action-btn">
+      {% if blog.previous_article %}
+      <span class="left">
+        &larr; {{ 'blogs.article.older_post' | t | link_to: blog.previous_article }}
+      </span>
+      {% endif %}
+      {% if blog.next_article %}
+      <span class="right">
+        {{ 'blogs.article.newer_post' | t | link_to: blog.next_article }} &rarr;
+      </span>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% if blog.comments_enabled? %}
+
+    {% comment %}
+      Just like our blog.liquid page, define how many comments should be on each page.
+    {% endcomment %}
+	
+	<h2 class="title-comment">{{ 'blogs.comments.comments_with_count' | t: count: number_of_comments }}</h2>
+
+      {% paginate article.comments by 5 %}
+
+      {% comment %}
+        #comments is required, it is used as an anchor link by Shopify.
+      {% endcomment %}
+      <div id="comments">
+
+        {% if comment and comment.created_at %}
+        <p class="note form-success">
+          {% if blog.moderated? %}
+          <span {% if settings.enable_multilang %}data-translate="blogs.comments.success_moderated"{%endif%}>{{ 'blogs.comments.success_moderated' | t }}</span>
+          {% else %}
+          <span {% if settings.enable_multilang %}data-translate="blogs.comments.success"{%endif%}>{{ 'blogs.comments.success' | t }}</span>
+          {% endif %}
+        </p>
+        {% endif %}
+
+        {% if number_of_comments > 0 %}
+        <ul>
+          {% comment %}If a comment was just submitted with no blank field, let's show it.{% endcomment %}
+          {% if comment and comment.created_at %}
+          <li id="{{ comment.id }}" class="comment first{% if article.comments_count == 0 %} last{% endif %}">
+            {% include 'comment' %}
+          </li>
+          {% endif %}
+
+          {% comment %}
+            Showing the rest of the comments.
+          {% endcomment %}
+          {% for comment in article.comments %}
+          <li id="{{ comment.id }}" class="comment{% unless number_of_comments > article.comments_count %}{% if forloop.first %} first{% endif %}{% endunless %}{% if forloop.last %} last {% endif %}">
+            {% include 'comment' %}
+          </li>
+          {% endfor %}
+        </ul>
+        
+        {% if paginate.pages > 1 %}
+        <div class="text-center">
+          {% include 'pagination' %}
+        </div>
+        {% endif %}
+        {% endif %}
+
+        {% comment %}
+          Comment submission form
+        {% endcomment %}
+        
+        {% form article %}
+        {% comment %}
+          #add-comment-title is used simply as an anchor link
+        {% endcomment %}
+        <h3 id="add-comment-title" {% if settings.enable_multilang %}data-translate="blogs.comments.title"{%endif%}>{{ 'blogs.comments.title' | t }}</h3>
+        {% include 'form-errors-custom' %}
+        <div class="comment-form">
+          <label for="comment-author" {% if settings.enable_multilang %}data-translate="blogs.comments.name"{%endif%}>{{ 'blogs.comments.name' | t }}</label>
+          <input {% if form.errors contains "author" %}class="error"{% endif %} type="text" name="comment[author]" id="comment-author" value="{{ form.author }}">
+          
+          <label for="comment-email" {% if settings.enable_multilang %}data-translate="blogs.comments.email"{%endif%}>{{ 'blogs.comments.email' | t }}</label>
+          <input {% if form.errors contains "email" %}class="error"{% endif %} type="email" name="comment[email]" id="comment-email" value="{{ form.email }}">
+        </div>
+        
+        <div class="message">
+          <label for="comment-body" {% if settings.enable_multilang %}data-translate="blogs.comments.message"{%endif%}>{{ 'blogs.comments.message' | t }}</label>
+          <textarea {% if form.errors contains "body" %}class="error"{% endif %} name="comment[body]" id="comment-body">{{ form.body }}</textarea>
+        </div>
+        
+        <p class="note" {% if settings.enable_multilang %}data-translate="blogs.comments.note"{%endif%}>{{ 'blogs.comments.note' | t }}</p>
+        <input type="submit" class="btn-secondary" value="{{ 'blogs.comments.post' | t }}">
+        {% if form.errors %}
+        <script>
+          window.location.hash = '#add-comment-title';
+        </script>
+        {% endif %}
+        
+        {% if form.posted_successfully? %}
+        <script>
+          window.location.hash = '#comments';
+        </script>
+        {% endif %}
+        {% endform %}
+    </div>
+    {% endpaginate %}
+    {% endif %}
+  </div>
+</div>

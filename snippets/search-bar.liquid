@@ -1,0 +1,29 @@
+{% comment %}
+
+  A snippet to include a search bar anywhere in your theme.
+  Note we are using 'input-group' for the layout. Look under Forms > Input Groups for some demos.
+
+  More information:
+   - http://docs.shopify.com/themes/liquid-variables/search
+
+  Return only products or pages in results:
+    - http://docs.shopify.com/manual/configuration/store-customization/return-only-product-in-storefront-search-results
+    - Or manually add type=product or type=page to the search URL as a parameter
+
+{% endcomment %}
+
+{% if settings.show_header_search %}
+<a class="icon-search" href="javascript:void(0)" {% if settings.enable_multilang %}data-translate="general.search.submit"{% endif %}>{{ 'general.search.submit' | t }}</a>
+<form action="/search" method="get" class="input-group search-bar" role="search">
+  {% comment %}
+    Uncomment the following hidden input to only show products in your search results
+  {% endcomment %}
+  {% comment %}<input type="hidden" name="type" value="product">{% endcomment %}
+  
+  <input type="text" name="q" value="{{ search.terms | escape }}" {% if settings.enable_multilang %}data-translate="general.search.placeholder" translate-item="placeholder"{% endif %} placeholder="{{ 'general.search.placeholder' | t }}" class="input-group-field" aria-label="Search Site" autocomplete="off">
+  
+  <span class="input-group-btn">
+    <input type="submit" class="btn" {% if settings.enable_multilang %}data-translate="general.search.submit"{% endif %} value="{{ 'general.search.submit' | t }}">
+  </span>
+</form>
+{% endif %}

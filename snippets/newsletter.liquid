@@ -1,0 +1,117 @@
+ {% if settings.display_popup_newsletter %}
+<script type="text/javascript">// <![CDATA[
+jQuery(document).ready(function() {    //
+    var $modalParent        = jQuery('div.newsletterwrapper'),
+        modalWindow         = jQuery('#email-modal'),
+        emailModal          = jQuery('#email-modal'),
+        modalPageURL        = window.location.pathname; 
+          
+    modalWindow = modalWindow.html();
+    modalWindow = '<div id="email-modal">' + modalWindow + '</div>';
+    $modalParent.css({'position':'relative'});
+    jQuery('.wrapper #email-modal').remove();
+    $modalParent.append(modalWindow);
+  
+    if (jQuery.cookie('emailSubcribeModal') != 'closed') {
+        openEmailModalWindow();
+    };
+      
+    jQuery('#email-modal .btn.close').click(function(e) {
+        e.preventDefault();
+        closeEmailModalWindow();
+    });
+    jQuery('body').keydown(function(e) {
+        if( e.which == 27) {
+            closeEmailModalWindow();
+            jQuery('body').unbind('keydown');
+        }
+    });
+    jQuery('#mc_embed_signup form').submit(function() {
+        if (jQuery('#mc_embed_signup .email').val() != '') {
+            closeEmailModalWindow();
+        }
+    });
+      
+    function closeEmailModalWindow () {
+        jQuery('#email-modal .modal-window').fadeOut(600, function() {
+            jQuery('#email-modal .modal-overlay').fadeOut(600, function() {
+                jQuery('#email-modal').hide();
+                jQuery.cookie('emailSubcribeModal', 'closed', {expires:1, path:'/'});
+            });
+        })
+    }
+    function openEmailModalWindow () {
+        jQuery('#email-modal').fadeIn(600, function() {
+           jQuery('#email-modal .modal-window').fadeIn(600);
+        });
+    }
+      
+});
+// ]]
+// ]]></script>
+<div class="newsletterwrapper">
+  <div id="email-modal" style="display: none;">
+    <div class="modal-overlay"></div>
+    <div class="modal-window" style="display: none;">
+      <div class="window-window">
+        <div class="window-content">
+          <a class="btn close" title="{{ 'cart.ajax_cart.close' | t }}" data-translate="cart.ajax_cart.close">{{ 'cart.ajax_cart.close' | t }}</a>
+          <div class="left">
+            {% if settings.enable_multilang %}
+            <h1 class="title lang1">{{ settings.popup_newsletter_title | split: '|' | first }}</h1>
+            <h1 class="title lang2">{{ settings.popup_newsletter_title | split: '|' | last }}</h1>
+            {% else %}
+            <h1 class="title">{{ settings.popup_newsletter_title | split: '|' | first }}</h1>
+            {% endif %}
+            
+            {% if settings.enable_multilang %}
+            <p class="sub-title lang1">{{ settings.popup_newsletter_sub_title | split: '|' | first }}</p>
+            <p class="sub-title lang2">{{ settings.popup_newsletter_sub_title | split: '|' | last }}</p>
+            {% else %}
+            <p class="sub-title">{{ settings.popup_newsletter_sub_title | split: '|' | first }}</p>
+            {% endif %}
+            
+            <div id="mailchimp-email-subscibe">
+              <div id="mc_embed_signup">{% include 'newsletter-form' %}</div>
+            </div>
+            {% if settings.enable_multilang %}
+            <h2 class="message lang1">{{ settings.popup_newsletter_message | split: '|' | first }}</h2>
+            <h2 class="message lang2">{{ settings.popup_newsletter_message | split: '|' | last }}</h2>
+            {% else %}
+            <h2 class="message">{{ settings.popup_newsletter_message | split: '|' | first }}</h2>
+            {% endif %}
+            
+            {% if settings.display_popup_social %}
+            <div class="icon-social">
+              <ul>
+              {% if settings.display_popup_social_1 %}
+              <li class="social-1"><a title="FaceBook" href="{{ settings.popup_social_1_link }}">FaceBook</a></li>
+              {% endif %}
+              {% if settings.display_popup_social_2 %}
+              <li class="social-2"><a title="Twitter" href="{{ settings.popup_social_2_link }}">Twitter</a></li>
+              {% endif %}
+              {% if settings.display_popup_social_3 %}
+              <li class="social-3"><a title=" Google + " href="{{ settings.popup_social_3_link }}">Google +</a></li>
+              {% endif %}
+              {% if settings.display_popup_social_4 %}
+              <li class="social-4"><a title="RSS" href="{{ settings.popup_social_4_link }}">RSS</a></li>
+              {% endif %}
+              {% if settings.display_popup_social_5 %}
+              <li class="social-5"><a title="Pinterest" href="{{ settings.popup_social_5_link }}">Pinterest</a></li>
+              {% endif %}
+              {% if settings.display_popup_social_6 %}
+              <li class="social-6"><a title="Instagram" href="{{ settings.popup_social_6_link }}">Instagram</a></li>
+              {% endif %}
+              </ul>
+            </div>
+            {% endif %}
+          </div>
+          <div class="right">
+            {{ 'bg_newsletter.jpg' | asset_url | img_tag }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}

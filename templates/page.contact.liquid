@@ -1,0 +1,97 @@
+{% comment %}
+  This page template is a requirement if you are submitting your theme to the Shopify Theme Store.
+  Be sure to select page.contact as the template from the admin page to have this template take effect.
+
+  For information on adding more fields, visit:
+    - http://docs.shopify.com/support/configuration/store-customization/adding-fields-to-the-liquid-contact-form
+{% endcomment %}
+
+{% comment %}
+  Google Map
+{% endcomment %}
+{% if settings.display_google_map %}
+<div class="map">
+  {% if settings.google_map_code != blank %}
+  {{ settings.google_map_code }}
+  {% endif %}
+</div>
+{% endif %}
+
+<div class="contactus-page container">
+  {% include 'breadcrumb' %}
+    
+  {% comment %}
+    Regular page content goes here.
+  {% endcomment %}
+  <div class="rte">
+    {{ page.content }}
+  </div>
+  
+  {% comment %}
+    Contact form starts here
+  {% endcomment %}
+  <div>
+    {% form 'contact' %}
+    
+    {% comment %}
+      Successful message
+    {% endcomment %}
+    {% if form.posted_successfully? %}
+    <p class="note form-success" {% if settings.enable_multilang %}data-translate="contact.form.post_success"{% endif %}>
+      {{ 'contact.form.post_success' | t }}
+    </p>
+    {% endif %}
+    
+    {{ form.errors | default_errors }}
+    
+    <div class="row">    
+      <div class="col-xs-9">
+        <div id="contactFormWrapper">
+          {% if settings.enable_multilang %}
+          <h2 class="lang1">{{ settings.contact_title | split: '|' | first }}</h2>
+          <h2 class="lang2">{{ settings.contact_title | split: '|' | last }}</h2>
+          {% else %}
+          <h2>{{ settings.contact_title | split: '|' | first }}</h2>
+          {% endif %}
+          
+          <p class="line"></p>
+          
+          {% if settings.enable_multilang %}
+          <p class="lang1">{{ settings.contact_text_desc | split: '|' | first }}</p>
+          <p class="lang2">{{ settings.contact_text_desc | split: '|' | last }}</p>
+          {% else %}
+          <p>{{ settings.contact_text_desc | split: '|' | first }}</p>
+          {% endif %}
+          
+          <label for="contactFormName"><span {% if settings.enable_multilang %}data-translate="contact.form.name"{%endif%}>{{ 'contact.form.name' | t }}</span></label>
+          <input type="text" id="contactFormName" name="contact[name]" autocapitalize="words" placeholder="{{ settings.contact_your_name }}">
+            
+          <label for="contactFormPhone"><span {% if settings.enable_multilang %}data-translate="contact.form.phone"{%endif%}>{{ 'contact.form.phone' | t }}</span></label>
+          <input type="tel" name="contact[phone]" id="contactFormPhone" pattern="[0-9]*" placeholder="{{ settings.contact_phone_number }}">
+          
+          <label for="contactFormEmail"><span {% if settings.enable_multilang %}data-translate="contact.form.email"{%endif%}>{{ 'contact.form.email' | t }}</span><em>*</em></label>
+          <input type="email" name="contact[email]" id="contactFormEmail" autocorrect="off" autocapitalize="off" placeholder="{{ settings.contact_your_email }}">
+          
+          <label for="contactFormMessage"><span {% if settings.enable_multilang %}data-translate="contact.form.message"{%endif%}>{{ 'contact.form.message' | t }}</span><em>*</em></label>
+          <textarea rows="10" name="contact[body]" id="contactFormMessage" {% if settings.enable_multilang %}data-translate="contact.form.placeholder_message" translate-item="placeholder"{%endif%} placeholder="{{ 'contact.form.placeholder_message' | t }}"></textarea>
+          
+          <input type="submit" class="btn left" {% if settings.enable_multilang %}data-translate="contact.form.submit_contact"{%endif%} value="{{ 'contact.form.submit_contact' | t }}">
+        </div>
+      </div>
+      
+      {% if settings.display_location %}
+      <div class="col-xs-3">
+        {% if settings.location_code != blank %}
+        {% if settings.enable_multilang %}
+        <div class="location lang1">{{ settings.location_code | split: '|' | first }}</div>
+        <div class="location lang2">{{ settings.location_code | split: '|' | last }}</div>
+        {% else %}
+        <div class="location">{{ settings.location_code | split: '|' | first }}</div>
+        {% endif %}
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+    {% endform %}
+  </div>
+</div>

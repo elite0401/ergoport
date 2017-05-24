@@ -1,0 +1,49 @@
+{% if settings.show_slider_trending %}
+{% if settings.show_slider_trending_collection == blank %}
+<p style="margin-bottom: 30px;" class="container">Please select a collection in Theme Setting to display the products (Home Page section -> Home Page Trending Now Slider)</p>
+{% else %}
+<section class="widget-trending-product container">
+  {% if settings.slider_trending_title != blank %}
+  <div class="widget-title wow fadeIn">   
+    {% if settings.enable_multilang %}
+	<fieldset class="box-title lang1">
+      <legend align="center">{{ settings.slider_trending_title | split: '|' | first }}</legend>
+    </fieldset>
+	<fieldset class="box-title lang2">
+      <legend align="center">{{ settings.slider_trending_title | split: '|' | last }}</legend>
+    </fieldset>
+    {% else %}
+	<fieldset class="box-title">
+      <legend align="center">{{ settings.slider_trending_title | split: '|' | first }}</legend>
+    </fieldset>
+    {% endif %}
+  </div>
+  {% endif %}
+  <div class="widget-product">
+    <div class="products-grid row owl-carousel">
+      {% if settings.trending_collection_results_per_row != blank and settings.trending_collection_results_per_row != '5' %}
+        {% assign product_grid = 12 | divided_by: settings.trending_collection_results_per_row %}
+        {% assign columns = true %}
+      {% endif %}        
+
+      {% for product in collections[settings.show_slider_trending_collection].products limit:settings.slider_trending_limit_all %}
+        <div class="{% if settings.product_image_border %}grid-item-border{% endif %}{% if settings.product_image_crop %} crop_image{% else %} no_crop_image{% endif %} grid-item col-xs-6 col-sm-4 {% if product_grid == 3 %}col-md-3{% endif %} {% if columns %}col-lg-{{product_grid}}{% else %}col{% endif %}">
+        {% include 'product-grid-item' %}
+        </div>
+      {% endfor %}
+     </div>
+  </div>
+</section>
+
+<script>
+jQuery(document).ready(function() {
+  jQuery(".widget-trending-product .products-grid").owlCarousel({
+    navigation : true,
+    items : {{ settings.trending_collection_results_per_row }},
+    itemsTablet: [767,3],
+    itemsTabletSmall: [721,2]
+  });
+});
+</script>
+{% endif %}
+{% endif %}

@@ -1,0 +1,49 @@
+{% assign number_of_related_products = settings.number_of_related_products | plus:1 %}
+{% if collection == null or collection.handle == 'frontpage' or collection.handle == 'all' %}
+{% assign found_a_collection = false %}
+{% for c in product.collections %}
+  {% if found_a_collection == false and c.handle != 'frontpage' and c.handle != 'all' and c.all_products_count > 1 %}
+    {% assign found_a_collection = true %}
+    {% assign collection = c %}
+  {% endif %}
+{% endfor %}
+{% endif %}
+
+{% if collection and collection.products_count > 1 %}
+<section class="related-products">
+  {% if settings.related_products_title != '' %}
+    {% if settings.enable_multilang %}
+    <h2 class="lang1">{{ settings.related_products_title | split: '|' | first }}</h2>
+    <h2 class="lang2">{{ settings.related_products_title | split: '|' | last }}</h2>
+    {% else %}
+    <h2>{{ settings.related_products_title | split: '|' | first }}</h2>
+    {% endif %}
+  {% endif %}
+  <div class="products-grid row owl-carousel">
+  {% assign current_product = product %}
+  {% assign current_product_found = false %}
+  {% for product in collection.products limit: number_of_related_products %}
+    {% if product.handle == current_product.handle %}
+       {% assign current_product_found = true %}
+    {% else %}
+       {% unless current_product_found == false and forloop.last %}
+          <div class="{% if settings.product_image_border %}grid-item-border{% endif %}{% if settings.product_image_crop %} crop_image{% else %} no_crop_image{% endif %} grid-item col-xs-6 col-sm-4 {% if product_grid == 3 %}col-md-3{% endif %} col-lg-3">
+          {% include 'product-grid-item' %}
+          </div>
+       {% endunless %}
+    {% endif %}
+  {% endfor %}
+  </div>
+</section>
+<script>
+  jQuery(document).ready(function() {
+    jQuery(".related-products .products-grid").owlCarousel({   
+      navigation: true,
+      items : 4,
+ 	  itemsDesktop : [1200,3],
+      itemsTablet: [767,3],
+      itemsTabletSmall: [721,2]
+    });
+  });
+</script>
+{% endif %}

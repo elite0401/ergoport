@@ -1,0 +1,19 @@
+{% if settings.footer_display_newsletter %}
+<section class="newsletter">
+  <div class="block-title">
+    {% if settings.footer_newsletter_title != blank %}
+    <h3>
+      {% if settings.enable_multilang %}
+      <span class="lang1">{{ settings.footer_newsletter_title | split: '|' | first }}</span>
+      <span class="lang2">{{ settings.footer_newsletter_title | split: '|' | last }}</span>
+      {% else %}
+      <span>{{ settings.footer_newsletter_title | split: '|' | first }}</span>
+      {% endif %}
+    </h3>
+    {% endif %}
+  </div>
+  <div class="block-content">
+    {% include 'newsletter-form' %}
+  </div>
+</section>
+{% endif %}

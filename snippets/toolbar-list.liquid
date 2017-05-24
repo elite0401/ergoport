@@ -1,0 +1,54 @@
+<div class="toolbar">
+  <div class="view-mode">
+    <label {% if settings.enable_multilang %}data-translate="collections.toolbar.view_as"{% endif %}>{{ 'collections.toolbar.view_as' | t }}</label>
+    <!--<span class="grid" title="Grid view">Grid</span>-->
+    <a class="grid" href="grid" title="{{ 'collections.general.grid_view' | t }}" {% if settings.enable_multilang %}data-translate="collections.general.grid_view" translate-item="title"{% endif %}><span {% if settings.enable_multilang %}data-translate="collections.general.grid_view"{% endif %}>{{ 'collections.general.grid_view' | t }}</span></a>  
+    <a class="list active" href="list" title="{{ 'collections.general.list_view' | t }}" {% if settings.enable_multilang %}data-translate="collections.general.list_view" translate-item="title"{% endif %}><span {% if settings.enable_multilang %}data-translate="collections.general.list_view"{% endif %}>{{ 'collections.general.list_view' | t }}</span></a>  
+  </div>
+  
+  <div class="filter-show btn-group">
+    <label {% if settings.enable_multilang %}data-translate="collections.toolbar.show"{% endif %}>{{ 'collections.toolbar.show' | t }}</label>
+    <button class="btn btn-2 dropdown-toggle" data-toggle="dropdown">
+      <i class="icon-exchange"></i>
+      {% if paginate.page_size != 50 %}
+      <span>{{paginate.page_size}}</span>
+      {% else %}
+      <span {% if settings.enable_multilang %}data-translate="collections.toolbar.all"{% endif %}>{{ 'collections.toolbar.all' | t }}</span>
+      {% endif %}
+      <i class="icon-chevron-down"></i>
+    </button>
+
+    <ul class="dropdown-menu" role="menu">
+      {% if settings.collection_results_per_page != blank %}
+      {% assign product_per_page = settings.collection_results_per_page %}
+      {% else %}
+      {% assign product_per_page = 12 %}
+      {% endif %}
+      {% assign current_page_size = paginate.page_size %}
+      <li {% if current_page_size == 12 %} class="active" {% endif %}><a href="{{ product_per_page }}">{{ product_per_page }}</a></li>
+      <li {% if current_page_size == 16 %} class="active" {% endif %}><a href="16">16</a></li>
+      <li {% if current_page_size == 32 %} class="active" {% endif %}><a href="32">32</a></li>
+      <li {% if current_page_size == 50 %} class="active" {% endif %}><a href="all" {% if settings.enable_multilang %}data-translate="collections.toolbar.all"{% endif %}>{{ 'collections.toolbar.all' | t }}</a></li>         
+    </ul>
+  </div>
+
+  <div class="filter-sortby btn-group">
+    <label for="sort-by" {% if settings.enable_multilang %}data-translate="collections.sorting.title"{% endif %}>{{ 'collections.sorting.title' | t }}</label> 
+    <button class="btn btn-2 dropdown-toggle" data-toggle="dropdown">
+      <i class="icon-exchange"></i>
+      <span {% if settings.enable_multilang %}data-translate="collections.sorting.featured"{% endif %}>{{ 'collections.sorting.featured' | t }}</span>
+      <i class="icon-chevron-down"></i>
+    </button>
+
+    <ul class="dropdown-menu" role="menu">
+      <li class="active"><a href="manual" {% if settings.enable_multilang %}data-translate="collections.sorting.featured"{% endif %}>{{ 'collections.sorting.featured' | t }}</a></li>
+      <li><a href="price-ascending" {% if settings.enable_multilang %}data-translate="collections.sorting.price_ascending"{% endif %}>{{ 'collections.sorting.price_ascending' | t }}</a></li>
+      <li><a href="price-descending" {% if settings.enable_multilang %}data-translate="collections.sorting.price_descending"{% endif %}>{{ 'collections.sorting.price_descending' | t }}</a></li>
+      <li><a href="title-ascending" {% if settings.enable_multilang %}data-translate="collections.sorting.az"{% endif %}>{{ 'collections.sorting.az' | t }}</a></li>
+      <li><a href="title-descending" {% if settings.enable_multilang %}data-translate="collections.sorting.za"{% endif %}>{{ 'collections.sorting.za' | t }}</a></li>
+      <li><a href="created-ascending" {% if settings.enable_multilang %}data-translate="collections.sorting.date_ascending"{% endif %}>{{ 'collections.sorting.date_ascending' | t }}</a></li>
+      <li><a href="created-descending" {% if settings.enable_multilang %}data-translate="collections.sorting.date_descending"{% endif %}>{{ 'collections.sorting.date_descending' | t }}</a></li>
+      <li><a href="best-selling" {% if settings.enable_multilang %}data-translate="collections.sorting.best_selling"{% endif %}>{{ 'collections.sorting.best_selling' | t }}</a></li>
+    </ul>
+  </div> 
+</div>

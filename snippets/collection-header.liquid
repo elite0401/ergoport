@@ -1,0 +1,23 @@
+<header class="page-header">
+  {% if settings.display_image_cat %}
+    <div class="img_cart">
+      {{ 'img_cat.jpg' | asset_url | img_tag }}
+    </div>
+  {% endif %}
+
+  {% if settings.enable_multilang %}
+    <h2 class="lang1">{{ collection.title | split: '|' | first }}</h2>
+    <h2 class="lang2">{{ collection.title | split: '|' | last }}</h2>
+  {% else %}
+  	<h2>{{ collection.title | split: '|' | first }}</h2>
+  {% endif %}
+
+  {% if collection.description != ''  %}
+    {% if settings.enable_multilang %}      
+      <div class="rte lang1">{{ collection.description | split: '[lang2]' | first }}</div>
+      <div class="rte lang2">{{ collection.description | split: '[lang2]' | last }}</div>
+    {% else %}
+  	  <div class="rte">{{ collection.description | split: '[lang2]' | first }}</div>
+    {% endif %}
+  {% endif %}      
+</header>

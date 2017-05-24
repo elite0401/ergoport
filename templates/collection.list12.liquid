@@ -1,0 +1,40 @@
+{% include 'breadcrumb' %}
+
+<div class="row">
+  {% include 'collection-sidebar' %}
+  <div class="block-row col-xs-9 col-main">
+    {% paginate collection.products by 12 %}
+
+    {% include 'collection-header' %}
+    {% include 'toolbar-list' %}
+    
+    {% comment %}
+      Use class grid-uniform to have evenly sized columns clear
+      each other properly at each breakpoint.
+    {% endcomment %}
+    <div class="product-list">
+      {% comment %}
+        Loop through our products in the current collection.
+        See the snippet 'product-grid-item' for the layout.
+      {% endcomment %}
+      {% if collection.products.size > 0 %}
+        {% for product in collection.products %}
+        {% include 'product-list-item' %}
+        {% endfor %}
+      {% else %}
+      <p class="text-center" {% if settings.enable_multilang %}data-translate="collections.general.no_matches"{%endif%}>{{ 'collections.general.no_matches' | t }}</p>
+      {% endif %}
+    </div>
+    
+    {% if paginate.pages > 1 %}
+    <div class="padding">
+      {% include 'pagination-page' %}
+    </div>
+    {% endif %}
+    {% endpaginate %}
+  </div>
+</div>
+
+{% if settings.display_recently_viewed_products %} 
+{% include 'recently-viewed-products' %}
+{% endif %}

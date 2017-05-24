@@ -1,0 +1,37 @@
+{% if shop.customer_accounts_enabled %}
+{% if customer %}
+<ul class="customer-links">
+  {% if settings.enable_wishlist %}
+  <li class="wishlist">
+    <span class="icon">&nbsp;</span>
+    <a href="/pages/wish-list" {% if settings.enable_multilang %}data-translate="wishlist.general.my_wishlist"{% endif %}>
+      {{ 'wishlist.general.my_wishlist' | t }}
+    </a>
+  </li>
+  {% endif %}
+  <li>
+    <a id="customer_logout_link" href="/account/logout" {% if settings.enable_multilang %}data-translate="layout.customer.log_out"{% endif %}>{{ 'layout.customer.log_out' | t }}</a>
+    <span class="or" {% if settings.enable_multilang %}data-translate="cart.label.or"{% endif %}>{{ 'cart.label.or' | t }}</span>
+    <a href="/account" {% if settings.enable_multilang %}data-translate="customer.account.title"{% endif %}>{{ 'customer.account.title' | t }}</a>
+  </li>
+</ul>
+{% else %}
+<ul class="customer-links">
+  {% if settings.enable_wishlist %}
+  <li class="wishlist">
+    <span class="icon">&nbsp;</span>
+    <a href="/pages/wish-list" {% if settings.enable_multilang %}data-translate="wishlist.general.my_wishlist"{% endif %}>
+      {{ 'wishlist.general.my_wishlist' | t }}
+    </a>
+  </li>
+  {% endif %}
+  <li>
+    <a id="customer_login_link" href="/account/login" {% if settings.enable_multilang %}data-translate="customer.login.sign_in"{% endif %}>{{ 'customer.login.sign_in' | t }}</a>
+    {% if shop.customer_accounts_optional %}
+    <span class="or" {% if settings.enable_multilang %}data-translate="cart.label.or"{% endif %}>{{ 'cart.label.or' | t }}</span>
+    <a id="customer_register_link" href="/account/register" {% if settings.enable_multilang %}data-translate="layout.customer.create_account"{% endif %}>{{ 'layout.customer.create_account' | t }}</a>
+    {% endif %}
+  </li>
+</ul>
+{% endif %}
+{% endif %}
