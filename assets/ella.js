@@ -480,9 +480,9 @@
                 //location.href = baseLink + "?" + newQuery;
                 if (newQuery != ""){
                     return baseLink + "?" + newQuery;
-                }
-                else
+                } else {
                     return baseLink;
+                }
             }
             return location.pathname + "?" + newQuery;
         },
