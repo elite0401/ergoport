@@ -478,8 +478,9 @@
             var newQuery = $.param(Shopify.queryParams).replace(/%2B/g, '+');
             if (baseLink) {
                 //location.href = baseLink + "?" + newQuery;
-                if (newQuery != "")
+                if (newQuery != ""){
                     return baseLink + "?" + newQuery;
+                }
                 else
                     return baseLink;
             }
