@@ -606,7 +606,6 @@
                     $(".gf-menu li.dropdown ul.site-nav-dropdown").hide();
                 }
 
-
                 $(".col-1 .inner ul.dropdown").parent().each(function() {
                     if ($(this).find("> p.toogleClick").length == 0) {
                         $(this).prepend('<p class="toogleClick">+</p>');
