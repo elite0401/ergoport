@@ -1234,7 +1234,6 @@
                         $('.quick-view input[name=quantity]').on('change', ella.updatePricingQuickview);
                     }
                 });
-
                 return false;
             });
 
