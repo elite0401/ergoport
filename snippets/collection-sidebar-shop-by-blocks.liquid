@@ -11,17 +11,6 @@ Refined tags
   <a href="javascript:void(0)" class="clear-all" {% if has_refined == false %}style="display:none"{% endif %} {% if settings.enable_multilang %}data-translate="collections.sidebar.clear_all"{% endif %}>
     {{ 'collections.sidebar.clear_all' | t }}
   </a>
-  {% comment %}
-  <ul>    
-  {% if collection.handle != 'all' %}
-    <li><a href="javascript:void(0)" class="selected-collection">{{collection.title}}<span>X</span></a></li>
-  {% endif %}
-  {% for t in current_tags %}
-    {% assign tag = t | strip %}
-    {% assign tag_value = tag | handleize %}
-    <li><a href="{{tag_value}}" class="selected-tag">{{tag}}<span>X</span></a></li>
-  {% endfor %}
-  </ul>{% endcomment %}
 </div>
 
 <div class="sidebar-block">
