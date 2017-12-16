@@ -168,12 +168,12 @@
               <div class="short-description">{{ product.description | split: '[lang2]' | first | strip_html | truncatewords: 50 }}</div>              
               {% endif %}
               {% elsif settings.show_desc == 'full' %}
-              {% if settings.enable_multilang %}
-              <div class="short-description lang1">{{ product.description | split: '[lang2]' | first }}</div>
-              <div class="short-description lang2">{{ product.description | split: '[lang2]' | last }}</div>
-              {% else %}
-              <div class="short-description">{{ product.description | split: '[lang2]' | first }}</div>
-              {% endif %}
+                {% if settings.enable_multilang %}
+                <div class="short-description lang1">{{ product.description | split: '[lang2]' | first }}</div>
+                <div class="short-description lang2">{{ product.description | split: '[lang2]' | last }}</div>
+                {% else %}
+                <div class="short-description">{{ product.description | split: '[lang2]' | first }}</div>
+                {% endif %}
               {% endif %}
             {% endif %}
                        
