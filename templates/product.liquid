@@ -112,12 +112,12 @@
             {% if settings.display_product_type %}
             <p class="product-type">
               {% if settings.text_product_type != blank %}
-              {% if settings.enable_multilang %}
-              <label class="lang1">{{ settings.text_product_type | split: '|' | first }}</label>
-              <label class="lang2">{{ settings.text_product_type | split: '|' | last }}</label>
-              {% else %}
-              <label>{{ settings.text_product_type | split: '|' | first }}</label>              
-              {% endif %}
+                {% if settings.enable_multilang %}
+                <label class="lang1">{{ settings.text_product_type | split: '|' | first }}</label>
+                <label class="lang2">{{ settings.text_product_type | split: '|' | last }}</label>
+                {% else %}
+                <label>{{ settings.text_product_type | split: '|' | first }}</label>              
+                {% endif %}
               {% endif %}
               <span>{{ product.type }}</span>
             </p>
