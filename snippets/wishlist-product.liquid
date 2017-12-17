@@ -30,6 +30,7 @@
         {{ 'wishlist.general.added_to_wishlist' | t }}
       </span>
     </a>
+    
     {% endif %}
   {% else %}
   <a class="wishlist" href="/account/login" title="{{ 'wishlist.general.add_to_wishlist' | t }}" {% if settings.enable_multilang %}data-translate="wishlist.general.note" translate-item="title"{% endif %}>
